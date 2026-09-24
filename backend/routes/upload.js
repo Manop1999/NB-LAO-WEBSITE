@@ -16,11 +16,15 @@ const ALLOWED_TYPES = {
   'image/gif': '.gif',
 };
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const UPLOADS_DIR = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.join(__dirname, '../../uploads');
+const PRODUCT_UPLOADS_DIR = path.join(UPLOADS_DIR, 'products');
 
 // Storage configuration
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    const dir = path.join(__dirname, '../../uploads/products');
+    const dir = PRODUCT_UPLOADS_DIR;
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
@@ -92,7 +96,7 @@ router.delete('/image/:filename', async (req, res) => {
     if (!/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/.test(filename)) {
       return res.status(400).json({ error: 'Invalid filename format' });
     }
-    const filePath = path.join(__dirname, '../../uploads/products', filename);
+    const filePath = path.join(PRODUCT_UPLOADS_DIR, filename);
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'File not found' });
     }

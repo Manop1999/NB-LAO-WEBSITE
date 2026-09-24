@@ -40,6 +40,9 @@ const { securityHeaders, sanitizeInput, rateLimiters, bodySizeLimit } = require(
 const app = express();
 const PORT = parseInt(process.env.PORT, 10) || 3001;
 const ROOT = path.resolve(__dirname, '..');
+const UPLOADS_DIR = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.join(ROOT, 'uploads');
 
 // --- Phase 27: Request ID ---
 app.use(function requestId(req, res, next) {
@@ -93,7 +96,7 @@ app.get('/api/health', async (req, res) => {
   try {
     await prisma.category.count();
     const fs = require('fs');
-    const uploadsDir = path.join(ROOT, 'uploads');
+    const uploadsDir = UPLOADS_DIR;
     let uploadsOk = true;
     try { fs.accessSync(uploadsDir); } catch (e) { uploadsOk = false; }
     res.json({
@@ -140,7 +143,7 @@ app.use('/api/admin', rateLimiters.admin, require('./routes/admin'));
 app.use('/api/admin/upload', require('./routes/upload'));  // admin rate limiter already applied by /api/admin router above
 
 // Phase 26: Serve uploaded files
-app.use('/uploads', express.static(path.join(ROOT, 'uploads'), { maxAge: '7d', immutable: true }));
+app.use('/uploads', express.static(UPLOADS_DIR, { maxAge: '7d', immutable: true }));
 app.use('/image', express.static(path.join(ROOT, 'image'), { maxAge: '30d', immutable: true }));
 
 // --- Static file serving (Phase 1 frontend) ---

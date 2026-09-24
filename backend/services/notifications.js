@@ -6,7 +6,7 @@ const BRAND = {
   tagline: 'ອຸປະກອນອຸດສາຫະກຳ & ໄຟຟ້າ',
   phone: '020 5555 8888',
   email: 'info@nblao.la',
-  website: 'http://localhost:3001',
+  website: process.env.APP_URL || 'http://localhost:3001',
 };
 
 // ── Status labels ───────────────────────────────────

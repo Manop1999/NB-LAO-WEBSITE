@@ -72,8 +72,8 @@ router.post('/customers/:id/send-password-reset', async (req, res) => {
     });
 
     const protocol = req.protocol || 'http';
-    const host = req.get('host') || 'localhost:3001';
-    const resetLink = protocol + '://' + host + '/customer.html#/reset-password?token=' + rawToken;
+    const baseUrl = (process.env.APP_URL || ((req.protocol || 'http') + '://' + (req.get('host') || 'localhost:3001'))).replace(/\/$/, '');
+    const resetLink = baseUrl + '/customer.html#/reset-password?token=' + rawToken;
     const { notifyPasswordReset } = require('../../services/notifications');
     notifyPasswordReset(customer, resetLink).catch(() => {});
 
