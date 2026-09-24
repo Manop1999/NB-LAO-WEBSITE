@@ -1,0 +1,693 @@
+{
+  "categories": [
+    {
+      "slug": "elec",
+      "icon": "⚡",
+      "lo": "ອຸປະກອນໄຟຟ້າ",
+      "en": "Electrical Equipment",
+      "subs": [
+        {
+          "slug": "circuit-breakers",
+          "lo": "ເບກເກີ (Circuit Breakers)",
+          "en": "Circuit Breakers"
+        },
+        {
+          "slug": "mccb-mcb",
+          "lo": "MCCB / MCB",
+          "en": "MCCB / MCB"
+        },
+        {
+          "slug": "contactor-relay",
+          "lo": "Contactor & Relay",
+          "en": "Contactor & Relay"
+        },
+        {
+          "slug": "switches-disconnectors",
+          "lo": "ສະວິດ & Disconnector",
+          "en": "Switches & Disconnectors"
+        },
+        {
+          "slug": "panel-boards-mdb",
+          "lo": "ຕູ້ໄຟ / MDB",
+          "en": "Panel Boards / MDB"
+        },
+        {
+          "slug": "transformers",
+          "lo": "ໝໍ້ແປງໄຟຟ້າ",
+          "en": "Transformers"
+        },
+        {
+          "slug": "surge-protection-devices",
+          "lo": "ອຸປະກອນປ້ອງກັນຟ້າຜ່າ",
+          "en": "Surge Protection Devices"
+        },
+        {
+          "slug": "fuses-protection-devices",
+          "lo": "ຟິວ ແລະ ອຸປະກອນປ້ອງກັນ",
+          "en": "Fuses & Protection Devices"
+        },
+        {
+          "slug": "electrical-measuring-tools",
+          "lo": "ເຄື່ອງມືວັດແທກໄຟຟ້າ",
+          "en": "Electrical Measuring Tools"
+        },
+        {
+          "slug": "electrical-accessories",
+          "lo": "ອຸປະກອນເສີມໄຟຟ້າ",
+          "en": "Electrical Accessories"
+        }
+      ]
+    },
+    {
+      "slug": "mech",
+      "icon": "⚙️",
+      "lo": "ອຸປະກອນກົນຈັກ",
+      "en": "Mechanical Components",
+      "subs": [
+        {
+          "slug": "bearings",
+          "lo": "ຕລັບລູກປືນ (Bearings)",
+          "en": "Bearings"
+        },
+        {
+          "slug": "gears-gearboxes",
+          "lo": "ເກຍ & ກະປຸກເກຍ",
+          "en": "Gears & Gearboxes"
+        },
+        {
+          "slug": "coupling",
+          "lo": "Coupling",
+          "en": "Coupling"
+        },
+        {
+          "slug": "valves",
+          "lo": "ວາວ (Valves)",
+          "en": "Valves"
+        },
+        {
+          "slug": "pumps",
+          "lo": "ປັ໊ມ (Pumps)",
+          "en": "Pumps"
+        },
+        {
+          "slug": "pneumatic-equipment",
+          "lo": "ອຸປະກອນລົມ (Pneumatic)",
+          "en": "Pneumatic Equipment"
+        },
+        {
+          "slug": "hydraulic-equipment",
+          "lo": "ອຸປະກອນໄຮໂດຼລິກ",
+          "en": "Hydraulic Equipment"
+        },
+        {
+          "slug": "mechanical-seals",
+          "lo": "Mechanical Seal",
+          "en": "Mechanical Seals"
+        },
+        {
+          "slug": "industrial-equipment",
+          "lo": "ອຸປະກອນອຸດສາຫະກຳ",
+          "en": "Industrial Equipment"
+        },
+        {
+          "slug": "power-plant-equipment",
+          "lo": "ອຸປະກອນໂຮງງານໄຟຟ້າ",
+          "en": "Power Plant Equipment"
+        }
+      ]
+    },
+    {
+      "slug": "tool",
+      "icon": "🛠️",
+      "lo": "ເຄື່ອງມືວິສະວະກຳ",
+      "en": "Engineering Tools",
+      "subs": [
+        {
+          "slug": "hand-tools",
+          "lo": "ເຄື່ອງມືມື",
+          "en": "Hand Tools"
+        },
+        {
+          "slug": "power-tools",
+          "lo": "ເຄື່ອງມືໄຟຟ້າ",
+          "en": "Power Tools"
+        },
+        {
+          "slug": "measuring-tools",
+          "lo": "ເຄື່ອງມືວັດແທກ",
+          "en": "Measuring Tools"
+        },
+        {
+          "slug": "cutting-tools",
+          "lo": "ເຄື່ອງມືຕັດ",
+          "en": "Cutting Tools"
+        },
+        {
+          "slug": "drilling-tools",
+          "lo": "ເຄື່ອງມືເຈາະ",
+          "en": "Drilling Tools"
+        },
+        {
+          "slug": "grinding-tools",
+          "lo": "ເຄື່ອງມືຂັດ",
+          "en": "Grinding Tools"
+        },
+        {
+          "slug": "welding-tools",
+          "lo": "ເຄື່ອງມືເຊື່ອມ",
+          "en": "Welding Tools"
+        },
+        {
+          "slug": "torque-tools",
+          "lo": "ເຄື່ອງມືປັ້ນແຮງບິດ",
+          "en": "Torque Tools"
+        },
+        {
+          "slug": "workshop-tools",
+          "lo": "ເຄື່ອງມືຫ້ອງກົນຈັກ",
+          "en": "Workshop Tools"
+        },
+        {
+          "slug": "tool-spare-parts",
+          "lo": "ອາໄຫລ່ເຄື່ອງມື",
+          "en": "Tool Spare Parts"
+        }
+      ]
+    },
+    {
+      "slug": "safe",
+      "icon": "🦺",
+      "lo": "ຄວາມປອດໄພ & ດັບເພີງ",
+      "en": "Safety & Fire Protection",
+      "subs": [
+        {
+          "slug": "safety-helmets",
+          "lo": "ໝວກນິລະໄພ",
+          "en": "Safety Helmets"
+        },
+        {
+          "slug": "safety-shoes",
+          "lo": "ເກີບນິລະໄພ",
+          "en": "Safety Shoes"
+        },
+        {
+          "slug": "safety-gloves",
+          "lo": "ຖົງມືນິລະໄພ",
+          "en": "Safety Gloves"
+        },
+        {
+          "slug": "safety-glasses",
+          "lo": "ແວ່ນຕານິລະໄພ",
+          "en": "Safety Glasses"
+        },
+        {
+          "slug": "protective-clothing",
+          "lo": "ຊຸດປ້ອງກັນ",
+          "en": "Protective Clothing"
+        },
+        {
+          "slug": "respiratory-protection",
+          "lo": "ອຸປະກອນປ້ອງກັນລະບົບຫາຍໃຈ",
+          "en": "Respiratory Protection"
+        },
+        {
+          "slug": "fall-protection",
+          "lo": "ອຸປະກອນປ້ອງກັນການຕົກ",
+          "en": "Fall Protection"
+        },
+        {
+          "slug": "fire-extinguishers",
+          "lo": "ຖັງດັບເພີງ",
+          "en": "Fire Extinguishers"
+        },
+        {
+          "slug": "fire-hoses",
+          "lo": "ສາຍດັບເພີງ",
+          "en": "Fire Hoses"
+        },
+        {
+          "slug": "fire-sprinkler-heads",
+          "lo": "ຫົວດັບເພີງ",
+          "en": "Fire Sprinkler Heads"
+        }
+      ]
+    },
+    {
+      "slug": "it",
+      "icon": "🖥️",
+      "lo": "IT, ເຄື່ອງໃຊ້ໄຟຟ້າ & CCTV",
+      "en": "IT, Appliances & CCTV",
+      "subs": [
+        {
+          "slug": "computers-accessories",
+          "lo": "ຄອມພິວເຕີ & ອຸປະກອນເສີມ",
+          "en": "Computers & Accessories"
+        },
+        {
+          "slug": "network-equipment",
+          "lo": "ອຸປະກອນເຄືອຂ່າຍ",
+          "en": "Network Equipment"
+        },
+        {
+          "slug": "cctv-cameras",
+          "lo": "ກ້ອງວົງຈອນປິດ",
+          "en": "CCTV Cameras"
+        },
+        {
+          "slug": "nvr-dvr",
+          "lo": "NVR / DVR",
+          "en": "NVR / DVR"
+        },
+        {
+          "slug": "monitors",
+          "lo": "ຈໍມອນິເຕີ",
+          "en": "Monitors"
+        },
+        {
+          "slug": "printers",
+          "lo": "ເຄື່ອງພິມ",
+          "en": "Printers"
+        },
+        {
+          "slug": "ups",
+          "lo": "UPS",
+          "en": "UPS"
+        },
+        {
+          "slug": "home-appliances",
+          "lo": "ເຄື່ອງໃຊ້ໄຟຟ້າ",
+          "en": "Home Appliances"
+        },
+        {
+          "slug": "access-control",
+          "lo": "Access Control",
+          "en": "Access Control"
+        }
+      ]
+    },
+    {
+      "slug": "comm",
+      "icon": "🔌",
+      "lo": "ສາຍ & ອຸປະກອນສື່ສານ",
+      "en": "Cables & Communication",
+      "subs": [
+        {
+          "slug": "power-cables",
+          "lo": "ສາຍໄຟກຳລັງ",
+          "en": "Power Cables"
+        },
+        {
+          "slug": "control-cables",
+          "lo": "ສາຍຄວບຄຸມ",
+          "en": "Control Cables"
+        },
+        {
+          "slug": "signal-cables",
+          "lo": "ສາຍສັນຍານ",
+          "en": "Signal Cables"
+        },
+        {
+          "slug": "fiber-optic-cables",
+          "lo": "ສາຍໄຍແກ້ວ",
+          "en": "Fiber Optic Cables"
+        },
+        {
+          "slug": "communication-equipment",
+          "lo": "ອຸປະກອນສື່ສານ",
+          "en": "Communication Equipment"
+        },
+        {
+          "slug": "network-accessories",
+          "lo": "ອຸປະກອນເສີມເຄືອຂ່າຍ",
+          "en": "Network Accessories"
+        },
+        {
+          "slug": "cable-gland",
+          "lo": "Cable Gland",
+          "en": "Cable Gland"
+        },
+        {
+          "slug": "cable-tray",
+          "lo": "Cable Tray",
+          "en": "Cable Tray"
+        }
+      ]
+    },
+    {
+      "slug": "office",
+      "icon": "🗄️",
+      "lo": "ເຟີນີເຈີ & ອຸປະກອນຫ້ອງການ",
+      "en": "Furniture & Office Supplies",
+      "subs": [
+        {
+          "slug": "office-desks",
+          "lo": "ໂຕະການ",
+          "en": "Office Desks"
+        },
+        {
+          "slug": "office-chairs",
+          "lo": "ຕັ່ງການ",
+          "en": "Office Chairs"
+        },
+        {
+          "slug": "filing-cabinets",
+          "lo": "ຕູ້ເກັບເອກະສານ",
+          "en": "Filing Cabinets"
+        },
+        {
+          "slug": "printers-ink",
+          "lo": "ເຄື່ອງພິມ & ໝຶກ",
+          "en": "Printers & Ink"
+        },
+        {
+          "slug": "office-supplies",
+          "lo": "ອຸປະກອນຫ້ອງການ",
+          "en": "Office Supplies"
+        }
+      ]
+    },
+    {
+      "slug": "water",
+      "icon": "💧",
+      "lo": "ນ້ຳ & ສານເຄມີ",
+      "en": "Water & Chemicals",
+      "subs": [
+        {
+          "slug": "water-treatment-equipment",
+          "lo": "ອຸປະກອນບຳບັດນ້ຳ",
+          "en": "Water Treatment Equipment"
+        },
+        {
+          "slug": "water-quality-meters",
+          "lo": "ເຄື່ອງວັດຄຸນນະພາບນ້ຳ",
+          "en": "Water Quality Meters"
+        },
+        {
+          "slug": "water-distillers",
+          "lo": "ເຄື່ອງກັ່ນນ້ຳ",
+          "en": "Water Distillers"
+        },
+        {
+          "slug": "pumps-filters",
+          "lo": "ປັ໊ມ & ຕົວກອງ",
+          "en": "Pumps & Filters"
+        },
+        {
+          "slug": "industrial-chemicals",
+          "lo": "ສານເຄມີອຸດສາຫະກຳ",
+          "en": "Industrial Chemicals"
+        }
+      ]
+    },
+    {
+      "slug": "motor",
+      "icon": "🔩",
+      "lo": "ມອເຕີ, ປັ໊ມນ້ຳ & ສາຍພານ",
+      "en": "Motors, Pumps & Belts",
+      "subs": [
+        {
+          "slug": "electric-motors",
+          "lo": "ມອເຕີໄຟຟ້າ",
+          "en": "Electric Motors"
+        },
+        {
+          "slug": "water-pumps",
+          "lo": "ປັ໊ມນ້ຳ",
+          "en": "Water Pumps"
+        },
+        {
+          "slug": "submersible-pumps",
+          "lo": "ປັ໊ມຈຸ່ມ",
+          "en": "Submersible Pumps"
+        },
+        {
+          "slug": "centrifugal-pumps",
+          "lo": "ປັ໊ມ Centrifugal",
+          "en": "Centrifugal Pumps"
+        },
+        {
+          "slug": "motor-spare-parts",
+          "lo": "ອາໄຫລ່ມອເຕີ",
+          "en": "Motor Spare Parts"
+        },
+        {
+          "slug": "v-belts",
+          "lo": "ສາຍພານ V-Belt",
+          "en": "V-Belts"
+        },
+        {
+          "slug": "timing-belts",
+          "lo": "ສາຍພານ Timing",
+          "en": "Timing Belts"
+        },
+        {
+          "slug": "pulleys",
+          "lo": "Pulley",
+          "en": "Pulleys"
+        }
+      ]
+    }
+  ],
+  "brands": [
+    {
+      "slug": "siemens",
+      "sortOrder": 1,
+      "name": "SIEMENS"
+    },
+    {
+      "slug": "schneider-electric",
+      "sortOrder": 2,
+      "name": "SCHNEIDER ELECTRIC"
+    },
+    {
+      "slug": "grundfos",
+      "sortOrder": 3,
+      "name": "GRUNDFOS"
+    },
+    {
+      "slug": "abb",
+      "sortOrder": 4,
+      "name": "ABB"
+    },
+    {
+      "slug": "bosch",
+      "sortOrder": 5,
+      "name": "BOSCH"
+    },
+    {
+      "slug": "3m",
+      "sortOrder": 6,
+      "name": "3M"
+    },
+    {
+      "slug": "mitsubishi-electric",
+      "sortOrder": 7,
+      "name": "MITSUBISHI ELECTRIC"
+    },
+    {
+      "slug": "legrand",
+      "sortOrder": 8,
+      "name": "LEGRAND"
+    },
+    {
+      "slug": "honeywell",
+      "sortOrder": 9,
+      "name": "HONEYWELL"
+    },
+    {
+      "slug": "delta",
+      "sortOrder": 10,
+      "name": "DELTA"
+    },
+    {
+      "slug": "panasonic",
+      "sortOrder": 11,
+      "name": "PANASONIC"
+    },
+    {
+      "slug": "ls-electric",
+      "sortOrder": 12,
+      "name": "LS ELECTRIC"
+    },
+    {
+      "slug": "stanley",
+      "sortOrder": 13,
+      "name": "STANLEY"
+    }
+  ],
+  "products": [
+    {
+      "sku": "EL-CAB-2540",
+      "slug": "thw-cable-2-5mm",
+      "catSlug": "comm-power-cables",
+      "brandSlug": null,
+      "price": 850000,
+      "priceUnit": "roll",
+      "stock": 500,
+      "loName": "ສາຍໄຟ THW 2.5mm² (ມ້ວນ 100m)",
+      "enName": "THW Cable 2.5mm² (100m roll)",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    },
+    {
+      "sku": "MT-PMP-3P5",
+      "slug": "motor-3-phase-5hp",
+      "catSlug": "motor-electric-motors",
+      "brandSlug": null,
+      "price": null,
+      "priceUnit": null,
+      "stock": 500,
+      "loName": "ມອເຕີ 3 ເຟສ 5HP ຮຸ່ນ Industrial",
+      "enName": "3-Phase Motor 5HP Industrial Series",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    },
+    {
+      "sku": "VL-BL-2IN",
+      "slug": "ball-valve-2-inch",
+      "catSlug": "mech-valves",
+      "brandSlug": null,
+      "price": 185000,
+      "priceUnit": "pcs",
+      "stock": 500,
+      "loName": "ວາວປິດເປີດ Ball Valve 2 ນິ້ວ",
+      "enName": "Ball Valve 2 inch",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    },
+    {
+      "sku": "SF-HLM-CE",
+      "slug": "safety-helmet-class-e",
+      "catSlug": "safe-safety-helmets",
+      "brandSlug": null,
+      "price": 65000,
+      "priceUnit": "pcs",
+      "stock": 500,
+      "loName": "ໝວກນິລະໄພ Class E ມາດຕະຖານ",
+      "enName": "Safety Helmet Class E Standard",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    },
+    {
+      "sku": "EL-BRK-40A",
+      "slug": "mcb-40a-1-pole",
+      "catSlug": "elec-circuit-breakers",
+      "brandSlug": "schneider-electric",
+      "price": 95000,
+      "priceUnit": "pcs",
+      "stock": 500,
+      "loName": "ເບກເກີ MCB 40A 1 ໂພລ",
+      "enName": "MCB Circuit Breaker 40A 1 Pole",
+      "loDesc": "ເບກເກີ MCB Acti9 ຈາກ Schneider Electric ອອກແບບສຳລັບປ້ອງກັນວົງຈອນໄຟຟ້າຂະໜາດນ້ອຍ-ກາງ ເໝາະສຳລັບຕູ້ໄຟທີ່ຢູ່ອາໃສ, ຮ້ານຄ້າ ແລະ ອາຄານພານິດ. ຜະລິດຕາມມາດຕະຖານສາກົນ IEC ໃຫ້ຄວາມທົນທານ ແລະ ຄວາມປອດໄພສູງ.",
+      "enDesc": "The Acti9 MCB from Schneider Electric is designed to protect small to medium electrical circuits, suitable for residential, retail, and commercial buildings. Manufactured to international IEC standards for high durability and safety.",
+      "origin": "France",
+      "warranty": "12 months",
+      "modelNumber": "iC60N-40A",
+      "specs": [
+        {
+          "key": "current_rating",
+          "loLabel": "ກະແສໄຟ (Current Rating)",
+          "enLabel": "Current Rating",
+          "value": "40 A"
+        },
+        {
+          "key": "poles",
+          "loLabel": "ຈຳນວນໂພລ (Poles)",
+          "enLabel": "Poles",
+          "value": "1P"
+        },
+        {
+          "key": "voltage",
+          "loLabel": "ແຮງດັນໃຊ້ງານ (Voltage)",
+          "enLabel": "Operating Voltage",
+          "value": "230/400 V AC"
+        },
+        {
+          "key": "breaking_capacity",
+          "loLabel": "ຄວາມສາມາດຕັດວົງຈອນ (Breaking Capacity)",
+          "enLabel": "Breaking Capacity",
+          "value": "6 kA"
+        },
+        {
+          "key": "standard",
+          "loLabel": "ມາດຕະຖານ (Standard)",
+          "enLabel": "Standard",
+          "value": "IEC 60898-1"
+        },
+        {
+          "key": "weight",
+          "loLabel": "ນ້ຳໜັກ (Weight)",
+          "enLabel": "Weight",
+          "value": "0.15 kg"
+        }
+      ]
+    },
+    {
+      "sku": "EL-PNL-12W",
+      "slug": "panel-board-12-way",
+      "catSlug": "elec-panel-boards-mdb",
+      "brandSlug": null,
+      "price": 32000,
+      "priceUnit": "pcs",
+      "stock": 500,
+      "loName": "ຕູ້ໄຟ Panel Board 12 ຊ່ອງ",
+      "enName": "Panel Board 12-Way",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    },
+    {
+      "sku": "EL-LED-18W",
+      "slug": "led-bulb-18w-daylight",
+      "catSlug": "elec-electrical-accessories",
+      "brandSlug": null,
+      "price": 28000,
+      "priceUnit": "pcs",
+      "stock": 500,
+      "loName": "ຫລອດ LED 18W ແສງຂາວ",
+      "enName": "LED Bulb 18W Daylight",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    },
+    {
+      "sku": "EL-SW-3G",
+      "slug": "light-switch-3-gang",
+      "catSlug": "elec-electrical-accessories",
+      "brandSlug": null,
+      "price": null,
+      "priceUnit": null,
+      "stock": 500,
+      "loName": "ສະວິດໄຟ 3 ຊ່ອງ",
+      "enName": "Light Switch 3-Gang",
+      "loDesc": null,
+      "enDesc": null,
+      "origin": null,
+      "warranty": null,
+      "modelNumber": null,
+      "specs": null
+    }
+  ]
+}

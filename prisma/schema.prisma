@@ -1,0 +1,757 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────
+// CATEGORY — 9 main + subcategories
+// ──────────────────────────────────────────────
+model Category {
+  id        Int      @id @default(autoincrement())
+  parentId  Int?
+  slug      String   @unique
+  icon      String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parent        Category?              @relation("CatParent", fields: [parentId], references: [id])
+  children      Category[]             @relation("CatParent")
+  products      Product[]
+  localizations CategoryLocalization[]
+}
+
+model CategoryLocalization {
+  id         Int    @id @default(autoincrement())
+  categoryId Int
+  locale     String
+  name       String
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+}
+
+// ──────────────────────────────────────────────
+// BRAND — 12 brands from wireframe
+// ──────────────────────────────────────────────
+model Brand {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  logoUrl   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products      Product[]
+  localizations BrandLocalization[]
+}
+
+model BrandLocalization {
+  id      Int    @id @default(autoincrement())
+  brandId Int
+  locale  String
+  name    String
+
+  brand Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@unique([brandId, locale])
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT — extended with variant support
+// ──────────────────────────────────────────────
+model Product {
+  id          Int      @id @default(autoincrement())
+  sku         String   @unique
+  slug        String   @unique
+  categoryId  Int
+  brandId     Int?
+  price       Int?
+  priceUnit   String?
+  stock       Int      @default(0)
+  status      String   @default("active")
+  origin      String?
+  warranty    String?
+  modelNumber String?
+  hasVariants Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category        Category               @relation(fields: [categoryId], references: [id])
+  brand           Brand?                 @relation(fields: [brandId], references: [id])
+  localizations   ProductLocalization[]
+  images          ProductImage[]
+  specifications  ProductSpecification[]
+  documents       ProductDocument[]
+  relatedProducts ProductRelation[]      @relation("SourceProduct")
+  relatedBy       ProductRelation[]      @relation("RelatedProduct")
+  cartItems       CartItem[]
+  quotationItems  QuotationItem[]
+  orderItems      OrderItem[]
+  reviews         ProductReview[]
+  wishlistedBy    Wishlist[]
+  variants        ProductVariant[]
+}
+
+model ProductLocalization {
+  id          Int     @id @default(autoincrement())
+  productId   Int
+  locale      String
+  name        String
+  description String?
+  howToUseLo  String?
+  howToUseEn  String?
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, locale])
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT IMAGE — local placeholder paths
+// ──────────────────────────────────────────────
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  url       String
+  altLo     String?
+  altEn     String?
+  isPrimary Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT DOCUMENT — downloadable files
+// ──────────────────────────────────────────────
+model ProductDocument {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  titleLo   String
+  titleEn   String
+  fileUrl   String
+  fileType  String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT SPECIFICATION — key/value pairs
+// ──────────────────────────────────────────────
+model ProductSpecification {
+  id          Int    @id @default(autoincrement())
+  productId   Int
+  specKey     String
+  specLabelLo String
+  specLabelEn String
+  specValue   String
+  sortOrder   Int    @default(0)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, specKey])
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT RELATION — prevent duplicate pairs
+// ──────────────────────────────────────────────
+model ProductRelation {
+  id               Int @id @default(autoincrement())
+  sourceProductId  Int
+  relatedProductId Int
+
+  sourceProduct  Product @relation("SourceProduct", fields: [sourceProductId], references: [id], onDelete: Cascade)
+  relatedProduct Product @relation("RelatedProduct", fields: [relatedProductId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceProductId, relatedProductId])
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT VARIANT — optional variants per product
+// ──────────────────────────────────────────────
+model ProductVariant {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  sku       String   @unique
+  name      String?
+  price     Int?
+  stock     Int      @default(0)
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
+  options ProductVariantOption[]
+
+  @@index([productId])
+}
+
+model ProductVariantOption {
+  id          Int    @id @default(autoincrement())
+  variantId   Int
+  optionKey   String
+  optionValue String
+
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([variantId, optionKey])
+  @@index([variantId])
+}
+
+// ──────────────────────────────────────────────
+// CUSTOMER — user accounts with VIP level
+// ──────────────────────────────────────────────
+model Customer {
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  passwordHash        String
+  name                String
+  phone               String?
+  company             String?
+  role                String               @default("customer")
+  level               String               @default("customer")
+  vatNumber           String?
+  taxId               String?
+  active              Boolean              @default(true)
+  staffId             Int?
+  pointsBalance       Int                  @default(0)
+  tierId              Int?
+  lifetimePoints      Int                  @default(0)
+  lifetimeSpending    Int                  @default(0)
+  cart                Cart?
+  quotations          Quotation[]
+  orders              Order[]
+  emails              EmailNotification[]
+  staff               Staff?
+  tier                LoyaltyTier?         @relation(fields: [tierId], references: [id])
+  pointsLedger        PointsLedger[]
+  passwordResetTokens PasswordResetToken[]
+  passwordChangedAt   DateTime?
+  reviews             ProductReview[]
+  wishlist            Wishlist[]
+  deliveryAddresses   DeliveryAddress[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+// ──────────────────────────────────────────────
+// DELIVERY ADDRESS — multiple per customer
+// ──────────────────────────────────────────────
+model DeliveryAddress {
+  id            Int      @id @default(autoincrement())
+  customerId    Int
+  label         String?
+  recipientName String
+  phone         String
+  addressLine1  String
+  addressLine2  String?
+  province      String
+  district      String
+  village       String?
+  postalCode    String?
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orders     Order[]
+  quotations Quotation[]
+
+  @@index([customerId])
+}
+
+// ──────────────────────────────────────────────
+// SHIPPING COMPANY — data-driven, admin-editable
+// ──────────────────────────────────────────────
+model ShippingCompany {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  nameEn    String?
+  phone     String?
+  logoUrl   String?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  branches   ShippingBranch[]
+  orders     Order[]
+  quotations Quotation[]
+
+  @@index([isActive])
+}
+
+model ShippingBranch {
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  name      String
+  nameEn    String?
+  province  String?
+  district  String?
+  phone     String?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company ShippingCompany @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  orders  Order[]
+
+  @@unique([companyId, name])
+  @@index([companyId])
+}
+
+// ──────────────────────────────────────────────
+// CART — one per customer
+// ──────────────────────────────────────────────
+model Cart {
+  id         Int      @id @default(autoincrement())
+  customerId Int      @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer Customer   @relation(fields: [customerId], references: [id])
+  items    CartItem[]
+}
+
+model CartItem {
+  id          Int     @id @default(autoincrement())
+  cartId      Int
+  productId   Int
+  quantity    Int     @default(1)
+  variantId   Int?
+  variantName String?
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId, variantId])
+  @@index([productId])
+}
+
+// ──────────────────────────────────────────────
+// QUOTATION — request for quote from cart
+// ──────────────────────────────────────────────
+model Quotation {
+  id                Int       @id @default(autoincrement())
+  customerId        Int
+  quotationNumber   String    @unique
+  status            String    @default("pending")
+  notes             String?
+  quotedAmount      Int?
+  deliveryAddressId Int?
+  shippingCompanyId Int?
+  shippingMethod    String?
+  approvedById      Int?
+  approvedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  customer        Customer                 @relation(fields: [customerId], references: [id])
+  items           QuotationItem[]
+  deliveryAddress DeliveryAddress?         @relation(fields: [deliveryAddressId], references: [id])
+  shippingCompany ShippingCompany?         @relation(fields: [shippingCompanyId], references: [id])
+  statusHistory   QuotationStatusHistory[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model QuotationItem {
+  quotationId Int
+  productId   Int
+  productName String
+  unitPrice   Int?
+  quantity    Int
+  variantId   Int?
+  variantName String?
+
+  quotation Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id])
+
+  @@id([quotationId, productId])
+}
+
+// ──────────────────────────────────────────────
+// QUOTATION STATUS HISTORY — audit trail
+// ──────────────────────────────────────────────
+model QuotationStatusHistory {
+  id           Int      @id @default(autoincrement())
+  quotationId  Int
+  fromStatus   String?
+  toStatus     String
+  notes        String?
+  quotedAmount Int?
+  staffId      Int?
+  positionId   Int?
+  staffName    String?
+  positionName String?
+  createdAt    DateTime @default(now())
+
+  quotation Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+
+  @@index([quotationId])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// ORDER — confirmed purchase from cart
+// ──────────────────────────────────────────────
+model Order {
+  id                Int       @id @default(autoincrement())
+  customerId        Int
+  orderNumber       String    @unique
+  status            String    @default("pending")
+  notes             String?
+  pointsEarned      Int       @default(0)
+  pointsRedeemed    Int       @default(0)
+  discountApplied   Int       @default(0)
+  deliveryAddressId Int?
+  shippingCompanyId Int?
+  shippingBranchId  Int?
+  shippingMethod    String?
+  shippingCost      Int       @default(0)
+  paymentMethod     String?
+  paymentId         Int?
+  approvedById      Int?
+  approvedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  customer        Customer             @relation(fields: [customerId], references: [id])
+  items           OrderItem[]
+  pointsLedgers   PointsLedger[]
+  couponId        Int?
+  coupon          CouponCode?          @relation(fields: [couponId], references: [id])
+  deliveryAddress DeliveryAddress?     @relation(fields: [deliveryAddressId], references: [id])
+  shippingCompany ShippingCompany?     @relation(fields: [shippingCompanyId], references: [id])
+  shippingBranch  ShippingBranch?      @relation(fields: [shippingBranchId], references: [id])
+  payment         Payment?
+  statusHistory   OrderStatusHistory[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([couponId])
+}
+
+model OrderItem {
+  orderId     Int
+  productId   Int
+  productName String
+  unitPrice   Int?
+  quantity    Int
+  variantId   Int?
+  variantName String?
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@id([orderId, productId])
+  @@index([productId])
+}
+
+// ──────────────────────────────────────────────
+// ORDER STATUS HISTORY — audit trail
+// ──────────────────────────────────────────────
+model OrderStatusHistory {
+  id           Int      @id @default(autoincrement())
+  orderId      Int
+  fromStatus   String?
+  toStatus     String
+  notes        String?
+  staffId      Int?
+  positionId   Int?
+  staffName    String?
+  positionName String?
+  createdAt    DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// PAYMENT — one per order
+// ──────────────────────────────────────────────
+model Payment {
+  id          Int       @id @default(autoincrement())
+  orderId     Int       @unique
+  method      String
+  status      String    @default("pending")
+  amount      Int
+  reference   String?
+  provider    String?
+  providerRef String?
+  paidAt      DateTime?
+  metadata    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([status])
+  @@index([method])
+}
+
+// ──────────────────────────────────────────────
+// PAYMENT METHOD — supported payment methods
+// ──────────────────────────────────────────────
+model PaymentMethod {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  nameLo      String
+  nameEn      String
+  description String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  config      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ──────────────────────────────────────────────
+// EMAIL NOTIFICATION — lightweight audit log
+// ──────────────────────────────────────────────
+model EmailNotification {
+  id             Int       @id @default(autoincrement())
+  recipientEmail String
+  subject        String
+  type           String
+  orderId        Int?
+  quotationId    Int?
+  customerId     Int?
+  status         String    @default("sent")
+  errorMessage   String?
+  sentAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  customer Customer? @relation(fields: [customerId], references: [id])
+
+  @@index([customerId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// POSITION — staff job positions
+// ──────────────────────────────────────────────
+model Position {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isSystem    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  staff Staff[]
+}
+
+// ──────────────────────────────────────────────
+// STAFF — staff user accounts (linked to Customer)
+// ──────────────────────────────────────────────
+model Staff {
+  id           Int      @id @default(autoincrement())
+  customerId   Int      @unique
+  positionId   Int?
+  isSuperAdmin Boolean  @default(false)
+  active       Boolean  @default(true)
+  permissions  String   @default("[]")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  customer  Customer   @relation(fields: [customerId], references: [id])
+  position  Position?  @relation(fields: [positionId], references: [id])
+  auditLogs AuditLog[]
+}
+
+// ──────────────────────────────────────────────
+// AUDIT LOG — track important admin actions
+// ──────────────────────────────────────────────
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  staffId    Int?
+  customerId Int?
+  action     String
+  module     String
+  targetId   Int?
+  details    String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  staff Staff? @relation(fields: [staffId], references: [id])
+
+  @@index([staffId])
+  @@index([customerId])
+  @@index([module])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// LOYALTY CONFIG — singleton config row
+// ──────────────────────────────────────────────
+model LoyaltyConfig {
+  id        Int      @id @default(autoincrement())
+  config    String   @default("{}")
+  updatedAt DateTime @updatedAt
+}
+
+// ──────────────────────────────────────────────
+// LOYALTY TIER — configurable tiers
+// ──────────────────────────────────────────────
+model LoyaltyTier {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  minPoints   Int      @default(0)
+  minSpending Int      @default(0)
+  discount    Float    @default(0)
+  multiplier  Float    @default(1.0)
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customers Customer[]
+}
+
+// ──────────────────────────────────────────────
+// POINTS LEDGER — immutable transaction log
+// ──────────────────────────────────────────────
+model PointsLedger {
+  id             Int       @id @default(autoincrement())
+  customerId     Int
+  type           String
+  points         Int
+  balanceBefore  Int
+  balanceAfter   Int
+  orderId        Int?
+  staffId        Int?
+  reason         String?
+  metadata       String?
+  expiresAt      DateTime?
+  expiredAt      DateTime?
+  sourceLedgerId Int?
+  createdAt      DateTime  @default(now())
+
+  customer       Customer       @relation(fields: [customerId], references: [id])
+  sourceLedger   PointsLedger?  @relation("SourceToExpired", fields: [sourceLedgerId], references: [id])
+  expiredLedgers PointsLedger[] @relation("SourceToExpired")
+  order          Order?         @relation(fields: [orderId], references: [id])
+
+  @@unique([customerId, orderId, type])
+  @@index([customerId])
+  @@index([orderId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// PASSWORD RESET TOKEN — hashed, single-use, 1hr expiry
+// ──────────────────────────────────────────────
+model PasswordResetToken {
+  id         Int       @id @default(autoincrement())
+  customerId Int
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+// ──────────────────────────────────────────────
+// PRODUCT REVIEW — ratings & reviews
+// ──────────────────────────────────────────────
+model ProductReview {
+  id         Int      @id @default(autoincrement())
+  productId  Int
+  customerId Int
+  rating     Int
+  title      String?
+  comment    String?
+  status     String   @default("pending")
+  adminNote  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@unique([productId, customerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// COUPON CODE — discount codes
+// ──────────────────────────────────────────────
+model CouponCode {
+  id             Int       @id @default(autoincrement())
+  code           String    @unique
+  type           String
+  value          Float
+  minOrderAmount Int?
+  maxUses        Int?
+  usedCount      Int       @default(0)
+  expiresAt      DateTime?
+  isActive       Boolean   @default(true)
+  description    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  orders Order[]
+}
+
+// ──────────────────────────────────────────────
+// WISHLIST — saved products
+// ──────────────────────────────────────────────
+model Wishlist {
+  id         Int      @id @default(autoincrement())
+  customerId Int
+  productId  Int
+  createdAt  DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, productId])
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
+// IMPORT JOB — CSV import tracking
+// ──────────────────────────────────────────────
+model ImportJob {
+  id          Int      @id @default(autoincrement())
+  staffId     Int?
+  module      String
+  filename    String
+  status      String   @default("pending")
+  totalRows   Int      @default(0)
+  successRows Int      @default(0)
+  errorRows   Int      @default(0)
+  errors      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([module])
+  @@index([staffId])
+}

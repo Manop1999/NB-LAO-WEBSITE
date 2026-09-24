@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Database
+prisma/dev.db
+prisma/dev.db-journal
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Backups
+backups/
+
+# Development / Test Tools
+.freebuff/
+.test-bin/
+_probe_out/
+
+# QA / Screenshot Outputs
+_final_*.png
+

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NB Lao — Wireframe Prototype V2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/nblao.css">
+</head>
+<body>
+
+<div class="proto-nav">
+  <span class="proto-label">Prototype ▸</span>
+  <button class="active" data-screen="home">1. Homepage</button>
+  <button data-screen="listing">2. Listing</button>
+  <button data-screen="detail">3. Product Detail</button>
+  <button data-screen="quote">4. ຟອມໃບສະເໜີລາຄາ</button>
+  <button data-screen="order">5. ຟອມສັ່ງຊື້</button>
+  <button data-screen="admin">6. Admin</button>
+</div>
+
+<!-- ================= REUSABLE HEADER TEMPLATE (duplicated per screen) ================= -->
+<!-- home header -->
+<div class="screen active" id="home">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu">
+            <div class="sel" onclick="setLang('lo')">ພາສາລາວ</div>
+            <div onclick="setLang('en')">English</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" class="active" data-i18n="nav_home">ໜ້າຫຼັກ</a>
+      <a href="#" class="mega-trigger" onmouseenter="openMega()" onmouseleave="scheduleCloseMega()"><span data-i18n="nav_products">ສິນຄ້າ</span><span class="care">▾</span></a>
+      <a href="#" data-i18n="nav_services">ບໍລິການ</a>
+      <a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a>
+      <a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+      <div class="mega-panel" id="megaPanel" onmouseenter="cancelCloseMega()" onmouseleave="scheduleCloseMega()">
+        <div class="mega-inner">
+          <div class="mega-col1" id="megaCol1"></div>
+          <div class="mega-col2" id="megaCol2"></div>
+          <div class="mega-col3" id="megaCol3"></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="promo-slider" id="promoSlider">
+    <button class="promo-arrow prev" onclick="promoGo(-1)">‹</button>
+    <button class="promo-arrow next" onclick="promoGo(1)">›</button>
+    <div class="promo-track" id="promoTrack">
+      <div class="promo-slide" style="background:linear-gradient(90deg,#0E2743,#1D4270);">
+        <div class="ptxt"><h3>ໂປຣໂມຊັນຕົ້ນປີ — ຫລຸດ 15% ອຸປະກອນໄຟຟ້າ</h3><p>ສະເພາະລູກຄ້າອໍເດີ້ໂດຍກົງ ຫລືຂໍໃບສະເໜີລາຄາຜ່ານເວັບໄຊ້, ຮອດ 31 ສ.ຫ. ນີ້ເທົ່ານັ້ນ</p><button class="btn-primary">ເບິ່ງໂປຣໂມຊັນ →</button></div>
+        <div class="pvis">⚡</div>
+      </div>
+      <div class="promo-slide" style="background:linear-gradient(90deg,#1D4270,#2C5580);">
+        <div class="ptxt"><h3>ສິນຄ້າໃໝ່: ມອເຕີ 3 ເຟສ ຮຸ່ນ Industrial</h3><p>ຮັບປະກັນຄຸນນະພາບ 12 ເດືອນ, ພ້ອມທີມງານໃຫ້ຄຳປຶກສາການເລືອກໃຊ້</p><button class="btn-primary">ຂໍໃບສະເໜີລາຄາ →</button></div>
+        <div class="pvis">⚙️</div>
+      </div>
+      <div class="promo-slide" style="background:linear-gradient(90deg,#0E2743,#264B72);">
+        <div class="ptxt"><h3>ຈັດສົ່ງທົ່ວປະເທດ ສຳລັບອໍເດີ້ 5,000,000 ກີບຂຶ້ນໄປ</h3><p>ຮັບປະກັນເວລາຈັດສົ່ງ ພ້ອມທີມງານຕິດຕາມອໍເດີ້ໃຫ້ຕະຫລອດ</p><button class="btn-primary">ສັ່ງຊື້ດຽວນີ້ →</button></div>
+        <div class="pvis">🚚</div>
+      </div>
+    </div>
+    <div class="promo-dots" id="promoDots"></div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">Industrial Procurement Platform</div>
+        <h1 data-i18n="hero_title">ອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບຊຸດ ສຳລັບໂຄງການ ແລະ ຮ້ານຄ້າ</h1>
+        <p data-i18n="hero_desc">ຄົ້ນຫາ, ປຽບທຽບ ແລະ ຂໍລາຄາອຸປະກອນຈາກຫລາຍຍີ່ຫໍ້ຊັ້ນນຳ ພ້ອມທີມງານດູແລການສັ່ງຊື້ໂດຍກົງ</p>
+        <div class="hero-actions">
+          <button class="btn-primary" data-i18n="hero_btn1">ເບິ່ງສິນຄ້າທັງໝົດ</button>
+          <button class="btn-ghost" data-i18n="hero_btn2">ຂໍລາຄາດ່ວນ →</button>
+        </div>
+      </div>
+      <div class="hero-panel bracket">
+        <div class="tag" data-i18n="hero_live">ຄຳຂໍລ່າສຸດ / LIVE</div>
+        <div class="hero-stat-row"><span>ວາວປິດເປີດ 2 ນິ້ວ</span><b>x120</b></div>
+        <div class="hero-stat-row"><span>ສາຍໄຟ THW 2.5mm</span><b>x40 ມ້ວນ</b></div>
+        <div class="hero-stat-row"><span>ມອເຕີ 3 ເຟສ 5HP</span><b data-i18n="ask_price">ຂໍລາຄາ</b></div>
+        <div class="hero-stat-row" style="border:none;"><span>ໝວກນິລະໄພ Class E</span><b>x300</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2 data-i18n="cat_heading">ໝວດໝູ່ສິນຄ້າ</h2><a href="#" data-i18n="view_all">ເບິ່ງທັງໝົດ →</a></div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="ic">⚡</div><span data-i18n="c_elec">ອຸປະກອນໄຟຟ້າ</span></div>
+      <div class="cat-card"><div class="ic">⚙️</div><span data-i18n="c_mech">ອຸປະກອນກົນຈັກ</span></div>
+      <div class="cat-card"><div class="ic">🛠️</div><span data-i18n="c_tool">ເຄື່ອງມືວິສະວະກຳ</span></div>
+      <div class="cat-card"><div class="ic">🦺</div><span data-i18n="c_safe">ຄວາມປອດໄພ</span></div>
+      <div class="cat-card"><div class="ic">🔩</div><span data-i18n="c_motor">ມອເຕີ / ປັ໊ມ</span></div>
+      <div class="cat-card"><div class="ic">💧</div><span data-i18n="c_water">ນ້ຳ / ສານເຄມີ</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2 data-i18n="featured_heading">ສິນຄ້າແນະນຳ</h2><a href="#" data-i18n="view_all">ເບິ່ງທັງໝົດ →</a></div>
+    <div class="prod-grid">
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: EL-CAB-2540</div><div class="prod-name" data-i18n="p_cable_thw25">ສາຍໄຟ THW 2.5mm² (ມ້ວນ 100m)</div>
+        <div class="prod-foot"><span class="prod-price" data-i18n="pr_850">850,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: MT-PMP-3P5</div><div class="prod-name" data-i18n="p_motor5hp_ind">ມອເຕີ 3 ເຟສ 5HP ຮຸ່ນ Industrial</div>
+        <div class="prod-foot"><span class="prod-price ask" data-i18n="ask_price_contact">ຕິດຕໍ່ຂໍລາຄາ</span><span class="badge badge-quote">B2B</span></div></div></div>
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: VL-BL-2IN</div><div class="prod-name" data-i18n="p_ballvalve2in">ວາວປິດເປີດ Ball Valve 2 ນິ້ວ</div>
+        <div class="prod-foot"><span class="prod-price" data-i18n="pr_185">185,000 ກີບ</span><span class="badge badge-low" data-i18n="badge_lowstock">ເຫລືອໜ້ອຍ</span></div></div></div>
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: SF-HLM-CE</div><div class="prod-name" data-i18n="p_helmet_ce">ໝວກນິລະໄພ Class E ມາດຕະຖານ</div>
+        <div class="prod-foot"><span class="prod-price" data-i18n="pr_65">65,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="brand-strip">
+    <div class="brand-track">
+      <span class="b">SIEMENS</span><span class="b">SCHNEIDER ELECTRIC</span><span class="b">GRUNDFOS</span><span class="b">ABB</span><span class="b">BOSCH</span><span class="b">3M</span><span class="b">MITSUBISHI ELECTRIC</span><span class="b">LEGRAND</span><span class="b">HONEYWELL</span><span class="b">DELTA</span><span class="b">PANASONIC</span><span class="b">LS ELECTRIC</span>
+      <span class="b">SIEMENS</span><span class="b">SCHNEIDER ELECTRIC</span><span class="b">GRUNDFOS</span><span class="b">ABB</span><span class="b">BOSCH</span><span class="b">3M</span><span class="b">MITSUBISHI ELECTRIC</span><span class="b">LEGRAND</span><span class="b">HONEYWELL</span><span class="b">DELTA</span><span class="b">PANASONIC</span><span class="b">LS ELECTRIC</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2 data-i18n="steps_heading">ວິທີສັ່ງຊື້</h2></div>
+    <div class="steps">
+      <div class="step-card"><div class="step-num">01</div><h3 data-i18n="s1_t">ເລືອກສິນຄ້າ</h3><p data-i18n="s1_d">ຄົ້ນຫາ ຫລື ເລືອກຈາກໝວດໝູ່ ແລ້ວເລືອກໃສ່ກະຕ່າ ຫລື ຂໍໃບສະເໜີລາຄາ</p></div>
+      <div class="step-card"><div class="step-num">02</div><h3 data-i18n="s2_t">ສົ່ງຄຳຂໍ</h3><p data-i18n="s2_d">ໃສ່ຂໍ້ມູນຕິດຕໍ່ ແລະ ສະຖານທີ່ຈັດສົ່ງ</p></div>
+      <div class="step-card"><div class="step-num">03</div><h3 data-i18n="s3_t">ຮັບການຢືນຢັນ</h3><p data-i18n="s3_d">ທີມງານຕິດຕໍ່ກັບພາຍໃນ 24 ຊົ່ວໂມງ ເພື່ອຢືນຢັນລາຄາ ແລະ ຈັດສົ່ງ</p></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 2. LISTING ============ -->
+<div class="screen" id="listing">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a>
+      <a href="#" class="active mega-trigger" onmouseenter="openMega()" onmouseleave="scheduleCloseMega()"><span data-i18n="nav_products">ສິນຄ້າ</span><span class="care">▾</span></a>
+      <a href="#" data-i18n="nav_services">ບໍລິການ</a>
+      <a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a>
+      <a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="c_elec">ອຸປະກອນໄຟຟ້າ</span></div>
+  <div class="listing-layout">
+    <div>
+      <div class="filter-box">
+        <h4 data-i18n="filt_cat">ໝວດໝູ່ສິນຄ້າ</h4>
+        <div class="cat-acc-wrap" id="catAccordion"></div>
+      </div>
+      <div class="filter-box"><h4 data-i18n="filt_brand">ຍີ່ຫໍ້</h4>
+        <div class="filter-opt"><input type="checkbox"> Schneider</div>
+        <div class="filter-opt"><input type="checkbox"> Siemens</div>
+        <div class="filter-opt"><input type="checkbox"> ABB</div>
+      </div>
+      <div class="filter-box"><h4 data-i18n="filt_volt">ຂໍ້ມູນສະເພາະ — ແຮງດັນ</h4>
+        <div class="filter-opt"><input type="checkbox"> 220V</div>
+        <div class="filter-opt"><input type="checkbox"> 380V</div>
+      </div>
+      <div class="filter-box"><h4 data-i18n="filt_status">ສະຖານະ</h4>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_instock">ມີສະຕັອກເທົ່ານັ້ນ</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_new">ສິນຄ້າໃໝ່</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_promo">ກຳລັງຫລຸດລາຄາ</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_bestseller">ສິນຄ້າຂາຍດີ</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_quoteonly">ສະເພາະຂໍລາຄາ (B2B)</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="listing-top"><span style="font-size:13px;color:var(--steel);" data-i18n="found_count">ພົບ 48 ລາຍການ</span>
+        <select><option data-i18n="sort_newest">ລຽງຕາມ: ໃໝ່ລ່າສຸດ</option><option data-i18n="sort_price">ລາຄາ ຕ່ຳ→ສູງ</option><option data-i18n="sort_name">ຊື່ ກ-ຮ</option></select></div>
+      <div class="listing-grid">
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-CAB-2540</div><div class="prod-name" data-i18n="p_cable_thw25">ສາຍໄຟ THW 2.5mm² (ມ້ວນ 100m)</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_850">850,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-BRK-40A</div><div class="prod-name" data-i18n="p_mcb40a">ເບກເກີ MCB 40A 1 ໂພລ</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_95">95,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-PNL-12W</div><div class="prod-name" data-i18n="p_panel12">ຕູ້ໄຟ Panel Board 12 ຊ່ອງ</div>
+          <div class="prod-foot"><span class="prod-price ask" data-i18n="ask_price_contact">ຕິດຕໍ່ຂໍລາຄາ</span><span class="badge badge-quote">B2B</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-LED-18W</div><div class="prod-name" data-i18n="p_led18">ຫລອດ LED 18W ແສງຂາວ</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_28">28,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-SW-3G</div><div class="prod-name" data-i18n="p_switch3g">ສະວິດໄຟ 3 ຊ່ອງ</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_32">32,000 ກີບ</span><span class="badge badge-low" data-i18n="badge_lowstock">ເຫລືອໜ້ອຍ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-CAB-4010</div><div class="prod-name" data-i18n="p_cable_vaf40">ສາຍໄຟ VAF 4.0mm² (ມ້ວນ 100m)</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_1320">1,320,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+      </div>
+      <div class="pagination"><button class="active">1</button><button>2</button><button>3</button><button>→</button></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 3. DETAIL ============ -->
+<div class="screen" id="detail">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a>
+      <a href="#" class="mega-trigger" onmouseenter="openMega()" onmouseleave="scheduleCloseMega()"><span data-i18n="nav_products">ສິນຄ້າ</span><span class="care">▾</span></a>
+      <a href="#" data-i18n="nav_services">ບໍລິການ</a>
+      <a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a>
+      <a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="c_elec">ອຸປະກອນໄຟຟ້າ</span> / <span data-i18n="p_mcb40a">ເບກເກີ MCB 40A</span></div>
+  <div class="detail-layout">
+    <div>
+      <div class="gallery-main bracket" data-i18n="gallery_main_ph">ຮູບໃຫຍ່ສິນຄ້າ</div>
+      <div class="gallery-thumbs"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div>
+      <div class="detail-brand">SCHNEIDER ELECTRIC</div>
+      <div class="detail-title" data-i18n="d_title">ເບກເກີ MCB 40A 1 ໂພລ ຮຸ່ນ Acti9</div>
+      <div class="detail-sku">SKU: EL-BRK-40A &nbsp;•&nbsp; <span data-i18n="d_model">ຮຸ່ນ: iC60N-40A</span></div>
+      <div class="detail-price-row">
+        <div class="detail-price"><span data-i18n="pr_95">95,000 ກີບ</span> <span style="font-size:13px;font-weight:400;color:var(--steel);" data-i18n="per_unit">/ ໜ່ວຍ</span></div>
+        <span class="badge badge-stock" data-i18n="d_stock_240">ມີສະຕັອກ 240 ໜ່ວຍ</span>
+      </div>
+      <div class="qty-row">
+        <div class="stepper"><button>−</button><input value="1" class="mono"><button>+</button></div>
+        <span class="moq-note" data-i18n="d_moq">ຈຳນວນສັ່ງຊື້ຂັ້ນຕ່ຳ: 1 ໜ່ວຍ</span>
+      </div>
+      <div class="detail-actions">
+        <button class="btn-primary" data-i18n="d_addcart">🛒 ໃສ່ກະຕ່າ</button>
+        <button class="btn-quote" data-i18n="d_askquote">📄 ຂໍໃບສະເໜີລາຄາ</button>
+      </div>
+      <div class="info-row"><b data-i18n="d_brand_lbl">ຍີ່ຫໍ້</b><span>Schneider Electric</span></div>
+      <div class="info-row"><b data-i18n="d_origin_lbl">ແຫລ່ງຜະລິດ</b><span data-i18n="d_origin_val">ຝຣັ່ງ (France)</span></div>
+      <div class="info-row"><b data-i18n="d_warranty_lbl">ການຮັບປະກັນ</b><span data-i18n="d_warranty_val">12 ເດືອນ</span></div>
+      <div class="info-row"><b data-i18n="d_unit_lbl">ຫົວໜ່ວຍ</b><span data-i18n="d_unit_val">ຊິ້ນ (pcs)</span></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="setDetailTab(this,'tp-desc')" data-i18n="tab_desc">ລາຍລະອຽດ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-spec')" data-i18n="tab_spec">ຂໍ້ມູນສະເພາະ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-doc')" data-i18n="tab_doc">ເອກະສານ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-usage')" data-i18n="tab_usage">ວິທີການໃຊ້ງານ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-rel')" data-i18n="tab_rel">ສິນຄ້າກ່ຽວຂ້ອງ</div>
+  </div>
+  <div class="tab-panel on" id="tp-desc"><p style="font-size:13.5px;color:var(--steel);line-height:1.8;" data-i18n="tp_desc_txt">ເບກເກີ MCB Acti9 ຈາກ Schneider Electric ອອກແບບສຳລັບປ້ອງກັນວົງຈອນໄຟຟ້າຂະໜາດນ້ອຍ-ກາງ ເໝາະສຳລັບຕູ້ໄຟທີ່ຢູ່ອາໃສ, ຮ້ານຄ້າ ແລະ ອາຄານພານິດ. ຜະລິດຕາມມາດຕະຖານສາກົນ IEC ໃຫ້ຄວາມທົນທານ ແລະ ຄວາມປອດໄພສູງ.</p></div>
+  <div class="tab-panel" id="tp-spec"><div class="spec-table"><table>
+    <tr><td data-i18n="spec_current">ກະແສໄຟ (Current Rating)</td><td>40 A</td></tr>
+    <tr><td data-i18n="spec_poles">ຈຳນວນໂພລ (Poles)</td><td>1P</td></tr>
+    <tr><td data-i18n="spec_voltage">ແຮງດັນໃຊ້ງານ (Voltage)</td><td>230/400 V AC</td></tr>
+    <tr><td data-i18n="spec_breaking">ຄວາມສາມາດຕັດວົງຈອນ (Breaking Capacity)</td><td>6 kA</td></tr>
+    <tr><td data-i18n="spec_standard">ມາດຕະຖານ (Standard)</td><td>IEC 60898-1</td></tr>
+    <tr><td data-i18n="spec_weight">ນ້ຳໜັກ (Weight)</td><td>0.15 kg</td></tr>
+  </table></div></div>
+  <div class="tab-panel" id="tp-doc"><p style="font-size:13.5px;color:var(--steel);">📄 Datasheet_ACTI9_MCB.pdf &nbsp; | &nbsp; 📄 Installation_Manual_LA.pdf &nbsp; | &nbsp; 📄 CE_Certificate.pdf</p></div>
+  <div class="tab-panel" id="tp-usage">
+    <div class="usage-steps">
+      <div class="usage-step"><div class="u-num">01</div><h5 data-i18n="us1_t">ຕິດຕັ້ງເຂົ້າ Panel</h5><p data-i18n="us1_d">ປິດແຫລ່ງໄຟກ່ອນ ແລ້ວຕິດຕັ້ງເບກເກີເຂົ້າ DIN Rail ພາຍໃນຕູ້ໄຟ</p></div>
+      <div class="usage-step"><div class="u-num">02</div><h5 data-i18n="us2_t">ຕໍ່ສາຍໄຟ</h5><p data-i18n="us2_d">ຕໍ່ສາຍເຂົ້າ-ອອກໃຫ້ຖືກຂົ້ວ ໂຕນຫັນແໜ້ນ ຕາມແຮງບິດທີ່ກຳນົດ</p></div>
+      <div class="usage-step"><div class="u-num">03</div><h5 data-i18n="us3_t">ທົດສອບ</h5><p data-i18n="us3_d">ເປີດແຫລ່ງໄຟ ແລະ ທົດສອບການເຮັດວຽກຂອງເບກເກີກ່ອນໃຊ້ງານຈິງ</p></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="tp-rel"><p style="font-size:13px;color:var(--steel);" data-i18n="tp_rel_txt">ຕູ້ໄຟ Panel Board 12 ຊ່ອງ &nbsp;•&nbsp; ສາຍໄຟ THW 2.5mm² &nbsp;•&nbsp; ຄອນແທັກເຕີ 40A</p></div>
+
+
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 4. QUOTE REQUEST FORM (ຟອມໃບສະເໜີລາຄາ) ============ -->
+<div class="screen" id="quote">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a><a href="#" data-i18n="nav_products">ສິນຄ້າ</a><a href="#" data-i18n="nav_services">ບໍລິການ</a><a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a><a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="bc_quote">ຟອມໃບສະເໜີລາຄາ</span></div>
+  <div class="req-layout">
+    <div>
+      <div class="form-card">
+        <span class="form-type-tag tag-quote" data-i18n="tag_b2b_quote">B2B QUOTATION REQUEST</span>
+        <h3 data-i18n="q_items_h">ລາຍການສິນຄ້າ (2)</h3>
+        <div class="req-item"><div class="th"></div><div class="nm"><span data-i18n="p_panel12">ຕູ້ໄຟ Panel Board 12 ຊ່ອງ</span><span>SKU: EL-PNL-12W</span></div>
+          <div class="stepper"><button>−</button><input value="3" class="mono"><button>+</button></div></div>
+        <div class="req-item" style="border:none;"><div class="th"></div><div class="nm"><span data-i18n="p_motor5hp">ມອເຕີ 3 ເຟສ 5HP</span><span>SKU: MT-PMP-3P5</span></div>
+          <div class="stepper"><button>−</button><input value="2" class="mono"><button>+</button></div></div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="q_contact_h">ຂໍ້ມູນຜູ້ຕິດຕໍ່</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_fullname">ຊື່ ແລະ ນາມສະກຸນ *</label><input data-i18n-ph="ph_name" placeholder="ທ້າວ / ນາງ ..."></div>
+          <div class="field"><label data-i18n="f_phone">ເບີໂທ *</label><input data-i18n-ph="ph_phone" placeholder="020 xxxxxxxx"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_company_lbl">ບໍລິສັດ / ໂຄງການ</label><input data-i18n-ph="ph_company" placeholder="ຊື່ບໍລິສັດ ຫລື ໂຄງການ"></div>
+          <div class="field"><label data-i18n="f_fb_email">Facebook / ອີເມວ</label><input data-i18n-ph="ph_fb_email" placeholder="ລິ້ງ ຫລື ອີເມວ"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="q_project_h">ລາຍລະອຽດໂຄງການ</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_quote_date">ວັນທີ່ຕ້ອງການໃບສະເໜີລາຄາ</label><input data-i18n-ph="ph_date" placeholder="ວັນ/ເດືອນ/ປີ"></div>
+          <div class="field"><label data-i18n="f_province">ແຂວງ / ນະຄອນຫລວງ</label><select><option data-i18n="prov_vte">ນະຄອນຫລວງວຽງຈັນ</option><option data-i18n="prov_lpb">ຫລວງພະບາງ</option></select></div>
+        </div>
+        <div class="field"><textarea rows="3" data-i18n-ph="ph_notes" placeholder="ລາຍລະອຽດເພີ່ມເຕີມ ເຊັ່ນ ເງື່ອນໄຂການຈັດສົ່ງ, ມາດຕະຖານທີ່ຕ້ອງການ..."></textarea></div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <h4 data-i18n="q_summary_h">ສະຫລຸບໃບສະເໜີລາຄາ</h4>
+      <div class="summary-row"><span data-i18n="q_row_panel">ຕູ້ໄຟ Panel Board ×3</span><span data-i18n="ask_price">ຂໍລາຄາ</span></div>
+      <div class="summary-row"><span data-i18n="q_row_motor">ມອເຕີ 3 ເຟສ 5HP ×2</span><span data-i18n="ask_price">ຂໍລາຄາ</span></div>
+      <div class="summary-row total"><span data-i18n="q_total_lbl">ຍອດລວມ</span><span data-i18n="q_total_val">ຈະແຈ້ງໃນໃບສະເໜີ</span></div>
+      <button class="btn-primary" data-i18n="q_submit_btn">ສົ່ງໃບສະເໜີລາຄາ →</button>
+      <div class="summary-note" data-i18n="q_note">* ນີ້ແມ່ນຄຳຂໍໃບສະເໜີລາຄາ (RFQ) — ທີມງານຈະຄິດໄລ່ ແລະ ສົ່ງໃບສະເໜີລາຄາຢ່າງເປັນທາງການໃຫ້ພາຍໃນ 24 ຊົ່ວໂມງ ຜ່ານເບີໂທ ຫລື ອີເມວທີ່ໃຫ້ໄວ້</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 5. PURCHASE ORDER FORM (ຟອມສັ່ງຊື້) ============ -->
+<div class="screen" id="order">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">2</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a><a href="#" data-i18n="nav_products">ສິນຄ້າ</a><a href="#" data-i18n="nav_services">ບໍລິການ</a><a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a><a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="bc_cart">ກະຕ່າ</span> / <span data-i18n="bc_order">ຟອມສັ່ງຊື້</span></div>
+  <div class="req-layout">
+    <div>
+      <div class="form-card">
+        <span class="form-type-tag tag-order" data-i18n="tag_direct_order">DIRECT ORDER — ຈາກກະຕ່າ</span>
+        <h3 data-i18n="o_items_h">ລາຍການສັ່ງຊື້ (2)</h3>
+        <div class="req-item"><div class="th"></div><div class="nm"><span data-i18n="p_mcb40a">ເບກເກີ MCB 40A 1 ໂພລ</span><span>SKU: EL-BRK-40A &nbsp;•&nbsp; <span data-i18n="pr_95">95,000 ກີບ</span>/<span data-i18n="unit_pcs">ໜ່ວຍ</span></span></div>
+          <div class="stepper"><button>−</button><input value="5" class="mono"><button>+</button></div></div>
+        <div class="req-item" style="border:none;"><div class="th"></div><div class="nm"><span data-i18n="p_cable_thw25_100m">ສາຍໄຟ THW 2.5mm² (100m)</span><span>SKU: EL-CAB-2540 &nbsp;•&nbsp; <span data-i18n="pr_850">850,000 ກີບ</span>/<span data-i18n="unit_roll">ມ້ວນ</span></span></div>
+          <div class="stepper"><button>−</button><input value="2" class="mono"><button>+</button></div></div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="o_recipient_h">ຂໍ້ມູນຜູ້ຮັບ</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_fullname">ຊື່ ແລະ ນາມສະກຸນ *</label><input data-i18n-ph="ph_name" placeholder="ທ້າວ / ນາງ ..."></div>
+          <div class="field"><label data-i18n="f_phone">ເບີໂທ *</label><input data-i18n-ph="ph_phone" placeholder="020 xxxxxxxx"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="o_delivery_h">ການຈັດສົ່ງ</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_province">ແຂວງ / ນະຄອນຫລວງ</label><select><option data-i18n="prov_vte">ນະຄອນຫລວງວຽງຈັນ</option><option data-i18n="prov_lpb">ຫລວງພະບາງ</option></select></div>
+          <div class="field"><label data-i18n="f_city">ເມືອງ</label><input data-i18n-ph="ph_city" placeholder="ເມືອງ..."></div>
+        </div>
+        <div class="field"><label data-i18n="f_address">ທີ່ຢູ່ລະອຽດ</label><textarea rows="2" data-i18n-ph="ph_address" placeholder="ບ້ານ, ຖະໜົນ, ຈຸດສັງເກດ..."></textarea></div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="o_payment_h">ການຊຳລະເງິນ</h3>
+        <div class="field"><label data-i18n="f_payment_method">ວິທີຊຳລະເງິນ *</label>
+          <select><option data-i18n="pay_bank">ໂອນຜ່ານທະນາຄານ (Bank Transfer)</option><option data-i18n="pay_cod">ຊຳລະປາຍທາງ (COD)</option><option>OnePay</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <h4 data-i18n="o_summary_h">ສະຫລຸບອໍເດີ້</h4>
+      <div class="summary-row"><span data-i18n="o_row_mcb">ເບກເກີ MCB 40A ×5</span><span>475,000</span></div>
+      <div class="summary-row"><span data-i18n="o_row_cable">ສາຍໄຟ THW 2.5mm ×2</span><span>1,700,000</span></div>
+      <div class="summary-row"><span data-i18n="o_row_shipping">ຄ່າຈັດສົ່ງ</span><span>50,000</span></div>
+      <div class="summary-row total"><span data-i18n="o_total_lbl">ຍອດລວມທັງໝົດ</span><span>2,225,000 <span data-i18n="currency_kip">ກີບ</span></span></div>
+      <button class="btn-primary" data-i18n="o_confirm_btn">ຢືນຢັນສັ່ງຊື້ →</button>
+      <div class="summary-note" data-i18n="o_note">* ຫລັງຈາກສົ່ງອໍເດີ້ ທີມງານຈະຕິດຕໍ່ຢືນຢັນ ແລະ ແຈ້ງຂໍ້ມູນຊຳລະເງິນ (ຖ້າເລືອກໂອນ) ພາຍໃນ 24 ຊົ່ວໂມງ</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 6. ADMIN ============ -->
+<div class="screen" id="admin">
+  <div class="admin-shell">
+    <div class="admin-side">
+      <div class="a-logo">NB LAO / ADMIN
+        <div class="lang-dropdown" style="margin-top:10px;">
+          <button class="lang-btn" style="font-size:11px;padding:5px 9px;" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+      <div class="admin-link on">📊 <span data-i18n="ad_dashboard">Dashboard</span></div>
+      <div class="admin-link">📦 <span data-i18n="ad_products">ສິນຄ້າ</span></div>
+      <div class="admin-link">🗂️ <span data-i18n="ad_categories">ໝວດໝູ່</span></div>
+      <div class="admin-link">🏷️ <span data-i18n="ad_brands">ຍີ່ຫໍ້</span></div>
+      <div class="admin-link">📄 <span data-i18n="ad_quotes">ໃບສະເໜີລາຄາ</span></div>
+      <div class="admin-link">🧾 <span data-i18n="ad_orders">ອໍເດີ້</span></div>
+      <div class="admin-link">⚙️ <span data-i18n="ad_settings">ຕັ້ງຄ່າ</span></div>
+    </div>
+    <div class="admin-main">
+      <div class="a-stats">
+        <div class="a-stat"><div class="n">14</div><div class="l" data-i18n="ad_stat_new">ຄຳຂໍໃໝ່ວັນນີ້</div></div>
+        <div class="a-stat"><div class="n">6</div><div class="l" data-i18n="ad_stat_pending">ລໍຖ້າສະເໜີລາຄາ</div></div>
+        <div class="a-stat"><div class="n">38.4M</div><div class="l" data-i18n="ad_stat_revenue">ຍອດເດືອນນີ້ (ກີບ)</div></div>
+        <div class="a-stat"><div class="n">7</div><div class="l" data-i18n="ad_stat_lowstock">ສິນຄ້າໃກ້ໝົດສະຕັອກ</div></div>
+      </div>
+      <div class="a-table"><table>
+        <tr><th data-i18n="ad_col_code">ລະຫັດ</th><th data-i18n="ad_col_customer">ລູກຄ້າ</th><th data-i18n="ad_col_type">ປະເພດ</th><th data-i18n="ad_col_total">ຍອດລວມ</th><th data-i18n="ad_col_status">ສະຖານະ</th><th data-i18n="ad_col_date">ວັນທີ</th></tr>
+        <tr><td class="code">NB-2026-0142</td><td>ທ້າວ ວົງໄຊ (ຮ້ານໄຟຟ້າສີສະຫວ່າງ)</td><td data-i18n="ad_type_order">ອໍເດີ້</td><td>2,225,000</td><td><span class="status-pill st-new" data-i18n="ad_st_new">ໃໝ່</span></td><td>19 ສ.ຫ.</td></tr>
+        <tr><td class="code">NB-2026-0141</td><td>ບໍລິສັດ ວຽງຈັນ ກໍ່ສ້າງ ຈຳກັດ</td><td data-i18n="ad_type_quote">ໃບສະເໜີລາຄາ</td><td data-i18n="ask_price">ຂໍລາຄາ</td><td><span class="status-pill st-review" data-i18n="ad_st_review">ກຳລັງກວດ</span></td><td>18 ສ.ຫ.</td></tr>
+        <tr><td class="code">NB-2026-0140</td><td>ນາງ ສຸກສະຫວັນ</td><td data-i18n="ad_type_order">ອໍເດີ້</td><td>340,000</td><td><span class="status-pill st-done" data-i18n="ad_st_done">ຢືນຢັນແລ້ວ</span></td><td>17 ສ.ຫ.</td></tr>
+        <tr><td class="code">NB-2026-0139</td><td>ໂຮງງານ ໄຟຟ້າພັດທະນາ</td><td data-i18n="ad_type_quote">ໃບສະເໜີລາຄາ</td><td data-i18n="ask_price">ຂໍລາຄາ</td><td><span class="status-pill st-review" data-i18n="ad_st_review">ກຳລັງກວດ</span></td><td>17 ສ.ຫ.</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/nblao.js"></script>
+</body>
+</html>

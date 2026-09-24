@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NB Lao — Wireframe Prototype V2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#122232;
+    --blueprint:#1D4270;
+    --blueprint-deep:#0E2743;
+    --paper:#EEF1F3;
+    --paper-2:#E3E7EA;
+    --line:#C3CBD1;
+    --safety:#E85C24;
+    --safety-deep:#C94A18;
+    --success:#2F7D5D;
+    --success-bg:#E3F1EA;
+    --warn-bg:#FCE9DC;
+    --steel:#5B6B76;
+    --white:#FFFFFF;
+    --row2-bg:#DDE2E6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Noto Sans Lao',sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  .proto-nav{background:var(--ink);color:#B9C6D1;display:flex;align-items:center;gap:2px;padding:10px 16px;flex-wrap:wrap;position:sticky;top:0;z-index:200;}
+  .proto-nav .proto-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#6C8199;margin-right:10px;text-transform:uppercase;}
+  .proto-nav button{background:transparent;border:1px solid #2A3E52;color:#B9C6D1;font-family:'Noto Sans Lao',sans-serif;font-size:13px;padding:7px 14px;border-radius:3px;cursor:pointer;transition:.15s;}
+  .proto-nav button:hover{border-color:var(--safety);color:#fff;}
+  .proto-nav button.active{background:var(--safety);border-color:var(--safety);color:#fff;font-weight:600;}
+
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  /* ================= SHARED HEADER (2-row) ================= */
+  .site-header{position:relative;z-index:90;}
+  .header-row1{background:var(--blueprint-deep);padding:0 24px;display:flex;align-items:center;gap:22px;height:72px;}
+  .header-row1-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;gap:22px;}
+  .logo{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:20px;letter-spacing:.02em;color:#fff;display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .logo .mark{width:10px;height:10px;background:var(--safety);display:inline-block;}
+  .search-wrap{flex:1;max-width:620px;margin:0 auto;}
+  .search-box{display:flex;border-radius:3px;overflow:hidden;background:#fff;}
+  .search-box input{border:none;padding:11px 14px;flex:1;font-family:inherit;font-size:13.5px;outline:none;color:var(--ink);}
+  .search-box button{background:var(--paper-2);border:none;padding:0 16px;cursor:pointer;font-size:14px;color:var(--blueprint-deep);}
+  .header-actions{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+  .h-action{color:#fff;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;text-decoration:none;white-space:nowrap;}
+  .h-action:hover{color:var(--safety);}
+  .badge-cart{background:var(--safety);color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;}
+  .lang-dropdown{position:relative;}
+  .lang-btn{background:transparent;border:1px solid #3E5A78;color:#fff;padding:7px 12px;border-radius:3px;font-size:13px;cursor:pointer;display:flex;gap:6px;align-items:center;font-family:inherit;}
+  .lang-btn:hover{border-color:var(--safety);}
+  .lang-menu{position:absolute;top:115%;right:0;background:#fff;border:1px solid var(--line);border-radius:4px;box-shadow:0 10px 24px rgba(0,0,0,.18);min-width:120px;display:none;z-index:150;overflow:hidden;}
+  .lang-menu.open{display:block;}
+  .lang-menu div{padding:9px 14px;font-size:13px;color:var(--ink);cursor:pointer;}
+  .lang-menu div:hover{background:var(--paper);}
+  .lang-menu div.sel{color:var(--safety-deep);font-weight:700;}
+
+  .header-row2{background:var(--row2-bg);border-bottom:1px solid var(--line);position:relative;}
+  .nav2{max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:38px;padding:11px 24px;}
+  .nav2 a{color:var(--blueprint-deep);font-size:13.5px;font-weight:600;text-decoration:none;padding:5px 0;display:flex;align-items:center;gap:5px;}
+  .nav2 a:hover{color:var(--safety-deep);}
+  .nav2 a.active{color:var(--safety-deep);}
+  .nav2 a .care{font-size:10px;transition:.15s;}
+  .mega-trigger.open .care{transform:rotate(180deg);}
+
+  /* Mega menu panel */
+  .mega-panel{position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:3px solid var(--safety);box-shadow:0 18px 34px rgba(14,39,67,.18);display:none;z-index:140;}
+  .mega-panel.open{display:block;}
+  .mega-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:270px 1fr 1fr;min-height:380px;max-height:460px;}
+  .mega-col1{background:var(--paper);border-right:1px solid var(--line);padding:8px 0;overflow-y:auto;}
+  .mega-cat-item{display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:13.5px;font-weight:600;cursor:pointer;border-left:3px solid transparent;color:var(--ink);}
+  .mega-cat-item .ic{font-size:15px;width:18px;text-align:center;}
+  .mega-cat-item .arrow{margin-left:auto;color:var(--steel);font-size:11px;}
+  .mega-cat-item:hover,.mega-cat-item.on{background:#fff;border-color:var(--safety);color:var(--blueprint-deep);}
+  .mega-col2,.mega-col3{padding:22px 26px;overflow-y:auto;}
+  .mega-col2 h5,.mega-col3 h5{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--steel);margin-bottom:12px;}
+  .mega-sub-item{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--paper-2);color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;}
+  .mega-sub-item:hover{color:var(--blueprint);}
+  .mega-sub-item .n{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#AEB8BF;margin-right:8px;}
+  .mega-col3 .view-all{margin-top:16px;display:inline-block;color:var(--safety-deep);font-weight:700;font-size:13px;text-decoration:none;}
+
+  .footer{background:var(--blueprint-deep);color:#9FB4C9;padding:40px 24px 20px;margin-top:50px;}
+  .footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;font-size:13px;}
+  .footer h4{color:#fff;font-size:13px;margin-bottom:12px;letter-spacing:.05em;text-transform:uppercase;}
+  .footer p, .footer a{color:#9FB4C9;text-decoration:none;line-height:2;}
+  .footer-bottom{max-width:1200px;margin:24px auto 0;border-top:1px solid #24405C;padding-top:16px;font-size:12px;color:#6C8199;}
+  .footer-social{display:flex;gap:10px;margin-top:14px;}
+  .soc-ic{width:34px;height:34px;border-radius:50%;background:#132B47;border:1px solid #24405C;display:flex;align-items:center;justify-content:center;font-size:15px;transition:.15s;text-decoration:none;}
+  .soc-ic:hover{background:var(--safety);border-color:var(--safety);transform:translateY(-2px);}
+  .footer-partners{max-width:1200px;margin:32px auto 0;border-top:1px solid #24405C;padding-top:22px;}
+  .fp-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6C8199;display:block;margin-bottom:14px;}
+  .fp-logos{display:flex;flex-wrap:wrap;gap:12px;}
+  .fp-logo{background:#132B47;border:1px solid #24405C;border-radius:4px;padding:12px 20px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#7A8FA6;letter-spacing:.03em;}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+  .breadcrumb{font-size:12px;color:var(--steel);padding:16px 24px;max-width:1200px;margin:0 auto;}
+  .breadcrumb span{color:var(--blueprint);}
+
+  .bracket{position:relative;}
+  .bracket::before,.bracket::after{content:"";position:absolute;width:16px;height:16px;border-color:var(--safety);border-style:solid;z-index:2;}
+  .bracket::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+  .bracket::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:2px;letter-spacing:.02em;}
+  .badge-stock{background:var(--success-bg);color:var(--success);}
+  .badge-low{background:var(--warn-bg);color:var(--safety-deep);}
+  .badge-quote{background:#E4E9EE;color:var(--blueprint-deep);}
+
+  /* ================= HOME ================= */
+  /* ---------- Promo banner slider (auto-advance) ---------- */
+  .promo-slider{position:relative;height:220px;overflow:hidden;background:var(--paper-2);}
+  .promo-track{display:flex;height:100%;transition:transform .6s ease;}
+  .promo-slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 60px;color:#fff;}
+  .promo-slide .ptxt h3{font-size:24px;font-weight:800;margin-bottom:8px;}
+  .promo-slide .ptxt p{font-size:13.5px;opacity:.9;max-width:420px;}
+  .promo-slide .ptxt button{margin-top:14px;}
+  .promo-slide .pvis{font-size:60px;opacity:.5;}
+  .promo-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;}
+  .promo-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;}
+  .promo-dots span.on{background:#fff;width:22px;border-radius:4px;}
+  .promo-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.25);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;z-index:5;}
+  .promo-arrow:hover{background:rgba(0,0,0,.4);}
+  .promo-arrow.prev{left:16px;}
+  .promo-arrow.next{right:16px;}
+
+  .hero{background:var(--blueprint-deep);position:relative;overflow:hidden;
+    background-image:linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size:28px 28px;}
+  .hero-inner{max-width:1200px;margin:0 auto;padding:64px 24px 74px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--safety);text-transform:uppercase;margin-bottom:14px;}
+  .hero h1{color:#fff;font-size:36px;font-weight:800;line-height:1.25;margin-bottom:16px;}
+  .hero p{color:#B9C6D1;font-size:15px;max-width:460px;margin-bottom:26px;}
+  .hero-actions{display:flex;gap:12px;}
+  .btn-primary{background:var(--safety);color:#fff;border:none;padding:10px 18px;border-radius:3px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap;}
+  .btn-primary:hover{background:var(--safety-deep);}
+  .btn-outline{background:transparent;border:1.5px solid var(--blueprint-deep);color:var(--blueprint-deep);padding:9px 16px;border-radius:3px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;}
+  .btn-ghost{background:transparent;border:1.5px solid #3E5A78;color:#fff;padding:10px 18px;border-radius:3px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;}
+  .hero-panel{background:#132B47;border:1px solid #24405C;padding:22px;position:relative;}
+  .hero-panel .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6C8199;margin-bottom:10px;}
+  .hero-stat-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #24405C;color:#DCE4EA;font-size:13px;}
+  .hero-stat-row b{color:#fff;font-family:'IBM Plex Mono',monospace;}
+
+  .section{padding:46px 24px;max-width:1200px;margin:0 auto;}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px;}
+  .section-head h2{font-size:21px;font-weight:800;}
+  .section-head a{font-size:13px;color:var(--blueprint);text-decoration:none;font-weight:600;}
+
+  .cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
+  .cat-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px 10px;text-align:center;cursor:pointer;transition:.15s;}
+  .cat-card:hover{border-color:var(--safety);transform:translateY(-2px);}
+  .cat-card .ic{width:34px;height:34px;background:var(--paper-2);border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .cat-card span{font-size:12.5px;font-weight:600;}
+
+  .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .prod-card{background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden;transition:.15s;}
+  .prod-card:hover{box-shadow:0 6px 18px rgba(14,39,67,.1);}
+  .prod-img{height:140px;background:var(--paper-2);margin:12px;display:flex;align-items:center;justify-content:center;color:#9AA7B0;font-size:12px;}
+  .prod-body{padding:0 14px 14px;}
+  .prod-sku{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--steel);margin-bottom:4px;}
+  .prod-name{font-size:14px;font-weight:600;margin-bottom:8px;min-height:38px;}
+  .prod-price{font-size:15px;font-weight:800;color:var(--blueprint-deep);}
+  .prod-price.ask{font-size:13px;color:var(--safety-deep);}
+  .prod-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+
+  .brand-strip{padding:26px 0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;position:relative;}
+  .brand-track{display:flex;gap:64px;align-items:center;width:max-content;animation:brandScroll 28s linear infinite;padding:0 32px;}
+  .brand-strip:hover .brand-track{animation-play-state:paused;}
+  .brand-track .b{color:#B6BEC4;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;white-space:nowrap;}
+  @keyframes brandScroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .step-card{position:relative;padding-top:6px;}
+  .step-num{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:700;color:var(--paper-2);position:absolute;top:-14px;right:0;}
+  .step-card h3{font-size:15px;margin-bottom:6px;position:relative;}
+  .step-card p{font-size:13px;color:var(--steel);position:relative;}
+
+  /* ================= LISTING ================= */
+  .listing-layout{display:grid;grid-template-columns:250px 1fr;gap:26px;max-width:1200px;margin:0 auto;padding:0 24px 50px;}
+  .filter-box{background:#fff;border:1px solid var(--line);border-radius:4px;padding:16px;margin-bottom:14px;}
+  .filter-box h4{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--steel);margin-bottom:10px;}
+  .filter-opt{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:5px 0;}
+
+  /* category accordion (mega-menu logic adapted for sidebar) */
+  .cat-acc-wrap{padding:2px 2px 4px;}
+  .cat-acc{border-bottom:1px solid var(--paper-2);}
+  .cat-acc-head{display:flex;align-items:center;gap:9px;padding:9px 2px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);}
+  .cat-acc-head .ic{font-size:14px;width:16px;text-align:center;}
+  .cat-acc-head .chev{margin-left:auto;font-size:10px;color:var(--steel);transition:.15s;}
+  .cat-acc.open .cat-acc-head{color:var(--blueprint-deep);}
+  .cat-acc.open .chev{transform:rotate(90deg);}
+  .cat-acc-body{display:none;padding:2px 0 8px 25px;}
+  .cat-acc-body.open{display:block;}
+  .cat-acc-body div{font-size:12.5px;padding:5px 0;color:var(--steel);cursor:pointer;}
+  .cat-acc-body div:hover{color:var(--blueprint);}
+
+  .listing-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .listing-top select{border:1px solid var(--line);padding:7px 10px;border-radius:3px;font-family:inherit;font-size:13px;}
+  .listing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .pagination{display:flex;gap:6px;justify-content:center;margin-top:30px;}
+  .pagination button{width:32px;height:32px;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;}
+  .pagination button.active{background:var(--blueprint-deep);color:#fff;border-color:var(--blueprint-deep);}
+
+  /* ================= DETAIL ================= */
+  .detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1200px;margin:0 auto;padding:10px 24px 50px;}
+  .gallery-main{height:340px;background:var(--paper-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#9AA7B0;margin-bottom:10px;}
+  .gallery-thumbs{display:flex;gap:8px;}
+  .gallery-thumbs div{width:60px;height:60px;background:var(--paper-2);border:1px solid var(--line);}
+  .detail-brand{font-size:12px;color:var(--blueprint);font-weight:600;margin-bottom:6px;}
+  .detail-title{font-size:24px;font-weight:800;margin-bottom:8px;}
+  .detail-sku{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--steel);margin-bottom:16px;}
+  .detail-price-row{display:flex;align-items:center;gap:12px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:18px;}
+  .detail-price{font-size:26px;font-weight:800;color:var(--blueprint-deep);}
+  .qty-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:3px;}
+  .stepper button{width:34px;height:34px;border:none;background:var(--paper);font-size:16px;cursor:pointer;}
+  .stepper input{width:44px;text-align:center;border:none;font-family:'IBM Plex Mono',monospace;font-size:14px;}
+  .moq-note{font-size:12px;color:var(--steel);}
+  .detail-actions{display:flex;gap:10px;margin-bottom:22px;}
+  .detail-actions button{flex:1;padding:13px;}
+  .btn-quote{background:#fff;border:1.5px solid var(--blueprint-deep);color:var(--blueprint-deep);border-radius:3px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;}
+  .btn-quote:hover{background:var(--paper);}
+  .info-row{display:flex;gap:8px;font-size:13px;padding:6px 0;color:var(--steel);}
+  .info-row b{color:var(--ink);min-width:90px;}
+
+  .tabs{display:flex;gap:0;border-bottom:2px solid var(--line);margin:40px 24px 0;max-width:1200px;margin-left:auto;margin-right:auto;flex-wrap:wrap;}
+  .tab{padding:12px 20px;font-size:13.5px;font-weight:600;color:var(--steel);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+  .tab.on{color:var(--blueprint-deep);border-color:var(--safety);}
+  .tab-panel{display:none;max-width:1200px;margin:0 auto;padding:22px 24px 50px;}
+  .tab-panel.on{display:block;}
+  .spec-table table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .spec-table td{padding:11px 14px;border-bottom:1px solid var(--line);}
+  .spec-table td:first-child{color:var(--steel);width:220px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+  .usage-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .usage-step{background:#fff;border:1px solid var(--line);border-radius:4px;padding:16px;}
+  .usage-step .u-num{font-family:'IBM Plex Mono',monospace;color:var(--safety);font-weight:700;font-size:13px;margin-bottom:6px;}
+  .usage-step h5{font-size:13.5px;margin-bottom:6px;}
+  .usage-step p{font-size:12.5px;color:var(--steel);}
+
+  /* ================= REQUEST / PURCHASE FORMS ================= */
+  .req-layout{display:grid;grid-template-columns:1fr 360px;gap:30px;max-width:1000px;margin:0 auto;padding:20px 24px 60px;}
+  .form-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:24px;margin-bottom:18px;}
+  .form-card h3{font-size:15px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:var(--steel);}
+  .field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:3px;padding:10px 12px;font-family:inherit;font-size:13.5px;outline:none;}
+  .field input:focus,.field textarea:focus{border-color:var(--blueprint);}
+  .req-item{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line);}
+  .req-item .th{width:46px;height:46px;background:var(--paper-2);flex-shrink:0;}
+  .req-item .nm{flex:1;font-size:13px;font-weight:600;}
+  .req-item .nm span{display:block;font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px;color:var(--steel);margin-top:2px;}
+  .summary-card{background:var(--blueprint-deep);color:#fff;border-radius:4px;padding:22px;position:sticky;top:70px;height:fit-content;}
+  .summary-card h4{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:#8FA6BC;margin-bottom:14px;}
+  .summary-row{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;color:#DCE4EA;}
+  .summary-row.total{border-top:1px solid #2A4A69;margin-top:8px;padding-top:14px;font-size:16px;font-weight:800;color:#fff;}
+  .summary-card .btn-primary{width:100%;margin-top:16px;padding:13px;}
+  .summary-note{font-size:11.5px;color:#8FA6BC;margin-top:12px;line-height:1.6;}
+  .form-type-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:10px;}
+  .tag-quote{background:#E4E9EE;color:var(--blueprint-deep);}
+  .tag-order{background:var(--warn-bg);color:var(--safety-deep);}
+
+  /* ================= ADMIN ================= */
+  .admin-shell{display:grid;grid-template-columns:210px 1fr;min-height:600px;}
+  .admin-side{background:var(--blueprint-deep);color:#B9C6D1;padding:18px 0;}
+  .admin-side .a-logo{font-family:'IBM Plex Mono',monospace;color:#fff;font-weight:700;padding:0 20px 20px;font-size:15px;border-bottom:1px solid #24405C;margin-bottom:12px;}
+  .admin-link{padding:11px 20px;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;}
+  .admin-link.on{background:#132B47;border-color:var(--safety);color:#fff;font-weight:600;}
+  .admin-main{padding:26px 30px;background:var(--paper);}
+  .a-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
+  .a-stat{background:#fff;border:1px solid var(--line);border-radius:4px;padding:16px;}
+  .a-stat .n{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:700;color:var(--blueprint-deep);}
+  .a-stat .l{font-size:12px;color:var(--steel);margin-top:4px;}
+  .a-table{background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .a-table table{width:100%;border-collapse:collapse;font-size:13px;}
+  .a-table th{text-align:left;background:var(--paper-2);padding:10px 14px;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--steel);}
+  .a-table td{padding:12px 14px;border-top:1px solid var(--line);}
+  .a-table .code{font-family:'IBM Plex Mono',monospace;color:var(--blueprint);}
+  .status-pill{font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px;}
+  .st-new{background:#E4E9EE;color:var(--blueprint-deep);}
+  .st-review{background:var(--warn-bg);color:var(--safety-deep);}
+  .st-done{background:var(--success-bg);color:var(--success);}
+
+  @media(max-width:900px){
+    .hero-inner,.detail-layout,.listing-layout,.req-layout,.admin-shell,.footer-grid{grid-template-columns:1fr;}
+    .cat-grid{grid-template-columns:repeat(3,1fr);}
+    .prod-grid,.listing-grid{grid-template-columns:repeat(2,1fr);}
+    .a-stats{grid-template-columns:repeat(2,1fr);}
+    .mega-inner{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="proto-nav">
+  <span class="proto-label">Prototype ▸</span>
+  <button class="active" data-screen="home">1. Homepage</button>
+  <button data-screen="listing">2. Listing</button>
+  <button data-screen="detail">3. Product Detail</button>
+  <button data-screen="quote">4. ຟອມໃບສະເໜີລາຄາ</button>
+  <button data-screen="order">5. ຟອມສັ່ງຊື້</button>
+  <button data-screen="admin">6. Admin</button>
+</div>
+
+<!-- ================= REUSABLE HEADER TEMPLATE (duplicated per screen) ================= -->
+<!-- home header -->
+<div class="screen active" id="home">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu">
+            <div class="sel" onclick="setLang('lo')">ພາສາລາວ</div>
+            <div onclick="setLang('en')">English</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" class="active" data-i18n="nav_home">ໜ້າຫຼັກ</a>
+      <a href="#" class="mega-trigger" onmouseenter="openMega()" onmouseleave="scheduleCloseMega()"><span data-i18n="nav_products">ສິນຄ້າ</span><span class="care">▾</span></a>
+      <a href="#" data-i18n="nav_services">ບໍລິການ</a>
+      <a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a>
+      <a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+      <div class="mega-panel" id="megaPanel" onmouseenter="cancelCloseMega()" onmouseleave="scheduleCloseMega()">
+        <div class="mega-inner">
+          <div class="mega-col1" id="megaCol1"></div>
+          <div class="mega-col2" id="megaCol2"></div>
+          <div class="mega-col3" id="megaCol3"></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="promo-slider" id="promoSlider">
+    <button class="promo-arrow prev" onclick="promoGo(-1)">‹</button>
+    <button class="promo-arrow next" onclick="promoGo(1)">›</button>
+    <div class="promo-track" id="promoTrack">
+      <div class="promo-slide" style="background:linear-gradient(90deg,#0E2743,#1D4270);">
+        <div class="ptxt"><h3>ໂປຣໂມຊັນຕົ້ນປີ — ຫລຸດ 15% ອຸປະກອນໄຟຟ້າ</h3><p>ສະເພາະລູກຄ້າອໍເດີ້ໂດຍກົງ ຫລືຂໍໃບສະເໜີລາຄາຜ່ານເວັບໄຊ້, ຮອດ 31 ສ.ຫ. ນີ້ເທົ່ານັ້ນ</p><button class="btn-primary">ເບິ່ງໂປຣໂມຊັນ →</button></div>
+        <div class="pvis">⚡</div>
+      </div>
+      <div class="promo-slide" style="background:linear-gradient(90deg,#1D4270,#2C5580);">
+        <div class="ptxt"><h3>ສິນຄ້າໃໝ່: ມອເຕີ 3 ເຟສ ຮຸ່ນ Industrial</h3><p>ຮັບປະກັນຄຸນນະພາບ 12 ເດືອນ, ພ້ອມທີມງານໃຫ້ຄຳປຶກສາການເລືອກໃຊ້</p><button class="btn-primary">ຂໍໃບສະເໜີລາຄາ →</button></div>
+        <div class="pvis">⚙️</div>
+      </div>
+      <div class="promo-slide" style="background:linear-gradient(90deg,#0E2743,#264B72);">
+        <div class="ptxt"><h3>ຈັດສົ່ງທົ່ວປະເທດ ສຳລັບອໍເດີ້ 5,000,000 ກີບຂຶ້ນໄປ</h3><p>ຮັບປະກັນເວລາຈັດສົ່ງ ພ້ອມທີມງານຕິດຕາມອໍເດີ້ໃຫ້ຕະຫລອດ</p><button class="btn-primary">ສັ່ງຊື້ດຽວນີ້ →</button></div>
+        <div class="pvis">🚚</div>
+      </div>
+    </div>
+    <div class="promo-dots" id="promoDots"></div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">Industrial Procurement Platform</div>
+        <h1 data-i18n="hero_title">ອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບຊຸດ ສຳລັບໂຄງການ ແລະ ຮ້ານຄ້າ</h1>
+        <p data-i18n="hero_desc">ຄົ້ນຫາ, ປຽບທຽບ ແລະ ຂໍລາຄາອຸປະກອນຈາກຫລາຍຍີ່ຫໍ້ຊັ້ນນຳ ພ້ອມທີມງານດູແລການສັ່ງຊື້ໂດຍກົງ</p>
+        <div class="hero-actions">
+          <button class="btn-primary" data-i18n="hero_btn1">ເບິ່ງສິນຄ້າທັງໝົດ</button>
+          <button class="btn-ghost" data-i18n="hero_btn2">ຂໍລາຄາດ່ວນ →</button>
+        </div>
+      </div>
+      <div class="hero-panel bracket">
+        <div class="tag" data-i18n="hero_live">ຄຳຂໍລ່າສຸດ / LIVE</div>
+        <div class="hero-stat-row"><span>ວາວປິດເປີດ 2 ນິ້ວ</span><b>x120</b></div>
+        <div class="hero-stat-row"><span>ສາຍໄຟ THW 2.5mm</span><b>x40 ມ້ວນ</b></div>
+        <div class="hero-stat-row"><span>ມອເຕີ 3 ເຟສ 5HP</span><b data-i18n="ask_price">ຂໍລາຄາ</b></div>
+        <div class="hero-stat-row" style="border:none;"><span>ໝວກນິລະໄພ Class E</span><b>x300</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2 data-i18n="cat_heading">ໝວດໝູ່ສິນຄ້າ</h2><a href="#" data-i18n="view_all">ເບິ່ງທັງໝົດ →</a></div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="ic">⚡</div><span data-i18n="c_elec">ອຸປະກອນໄຟຟ້າ</span></div>
+      <div class="cat-card"><div class="ic">⚙️</div><span data-i18n="c_mech">ອຸປະກອນກົນຈັກ</span></div>
+      <div class="cat-card"><div class="ic">🛠️</div><span data-i18n="c_tool">ເຄື່ອງມືວິສະວະກຳ</span></div>
+      <div class="cat-card"><div class="ic">🦺</div><span data-i18n="c_safe">ຄວາມປອດໄພ</span></div>
+      <div class="cat-card"><div class="ic">🔩</div><span data-i18n="c_motor">ມອເຕີ / ປັ໊ມ</span></div>
+      <div class="cat-card"><div class="ic">💧</div><span data-i18n="c_water">ນ້ຳ / ສານເຄມີ</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2 data-i18n="featured_heading">ສິນຄ້າແນະນຳ</h2><a href="#" data-i18n="view_all">ເບິ່ງທັງໝົດ →</a></div>
+    <div class="prod-grid">
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: EL-CAB-2540</div><div class="prod-name" data-i18n="p_cable_thw25">ສາຍໄຟ THW 2.5mm² (ມ້ວນ 100m)</div>
+        <div class="prod-foot"><span class="prod-price" data-i18n="pr_850">850,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: MT-PMP-3P5</div><div class="prod-name" data-i18n="p_motor5hp_ind">ມອເຕີ 3 ເຟສ 5HP ຮຸ່ນ Industrial</div>
+        <div class="prod-foot"><span class="prod-price ask" data-i18n="ask_price_contact">ຕິດຕໍ່ຂໍລາຄາ</span><span class="badge badge-quote">B2B</span></div></div></div>
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: VL-BL-2IN</div><div class="prod-name" data-i18n="p_ballvalve2in">ວາວປິດເປີດ Ball Valve 2 ນິ້ວ</div>
+        <div class="prod-foot"><span class="prod-price" data-i18n="pr_185">185,000 ກີບ</span><span class="badge badge-low" data-i18n="badge_lowstock">ເຫລືອໜ້ອຍ</span></div></div></div>
+      <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+        <div class="prod-sku">SKU: SF-HLM-CE</div><div class="prod-name" data-i18n="p_helmet_ce">ໝວກນິລະໄພ Class E ມາດຕະຖານ</div>
+        <div class="prod-foot"><span class="prod-price" data-i18n="pr_65">65,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="brand-strip">
+    <div class="brand-track">
+      <span class="b">SIEMENS</span><span class="b">SCHNEIDER ELECTRIC</span><span class="b">GRUNDFOS</span><span class="b">ABB</span><span class="b">BOSCH</span><span class="b">3M</span><span class="b">MITSUBISHI ELECTRIC</span><span class="b">LEGRAND</span><span class="b">HONEYWELL</span><span class="b">DELTA</span><span class="b">PANASONIC</span><span class="b">LS ELECTRIC</span>
+      <span class="b">SIEMENS</span><span class="b">SCHNEIDER ELECTRIC</span><span class="b">GRUNDFOS</span><span class="b">ABB</span><span class="b">BOSCH</span><span class="b">3M</span><span class="b">MITSUBISHI ELECTRIC</span><span class="b">LEGRAND</span><span class="b">HONEYWELL</span><span class="b">DELTA</span><span class="b">PANASONIC</span><span class="b">LS ELECTRIC</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2 data-i18n="steps_heading">ວິທີສັ່ງຊື້</h2></div>
+    <div class="steps">
+      <div class="step-card"><div class="step-num">01</div><h3 data-i18n="s1_t">ເລືອກສິນຄ້າ</h3><p data-i18n="s1_d">ຄົ້ນຫາ ຫລື ເລືອກຈາກໝວດໝູ່ ແລ້ວເລືອກໃສ່ກະຕ່າ ຫລື ຂໍໃບສະເໜີລາຄາ</p></div>
+      <div class="step-card"><div class="step-num">02</div><h3 data-i18n="s2_t">ສົ່ງຄຳຂໍ</h3><p data-i18n="s2_d">ໃສ່ຂໍ້ມູນຕິດຕໍ່ ແລະ ສະຖານທີ່ຈັດສົ່ງ</p></div>
+      <div class="step-card"><div class="step-num">03</div><h3 data-i18n="s3_t">ຮັບການຢືນຢັນ</h3><p data-i18n="s3_d">ທີມງານຕິດຕໍ່ກັບພາຍໃນ 24 ຊົ່ວໂມງ ເພື່ອຢືນຢັນລາຄາ ແລະ ຈັດສົ່ງ</p></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 2. LISTING ============ -->
+<div class="screen" id="listing">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a>
+      <a href="#" class="active mega-trigger" onmouseenter="openMega()" onmouseleave="scheduleCloseMega()"><span data-i18n="nav_products">ສິນຄ້າ</span><span class="care">▾</span></a>
+      <a href="#" data-i18n="nav_services">ບໍລິການ</a>
+      <a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a>
+      <a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="c_elec">ອຸປະກອນໄຟຟ້າ</span></div>
+  <div class="listing-layout">
+    <div>
+      <div class="filter-box">
+        <h4 data-i18n="filt_cat">ໝວດໝູ່ສິນຄ້າ</h4>
+        <div class="cat-acc-wrap" id="catAccordion"></div>
+      </div>
+      <div class="filter-box"><h4 data-i18n="filt_brand">ຍີ່ຫໍ້</h4>
+        <div class="filter-opt"><input type="checkbox"> Schneider</div>
+        <div class="filter-opt"><input type="checkbox"> Siemens</div>
+        <div class="filter-opt"><input type="checkbox"> ABB</div>
+      </div>
+      <div class="filter-box"><h4 data-i18n="filt_volt">ຂໍ້ມູນສະເພາະ — ແຮງດັນ</h4>
+        <div class="filter-opt"><input type="checkbox"> 220V</div>
+        <div class="filter-opt"><input type="checkbox"> 380V</div>
+      </div>
+      <div class="filter-box"><h4 data-i18n="filt_status">ສະຖານະ</h4>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_instock">ມີສະຕັອກເທົ່ານັ້ນ</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_new">ສິນຄ້າໃໝ່</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_promo">ກຳລັງຫລຸດລາຄາ</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_bestseller">ສິນຄ້າຂາຍດີ</span></div>
+        <div class="filter-opt"><input type="checkbox"> <span data-i18n="filt_quoteonly">ສະເພາະຂໍລາຄາ (B2B)</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="listing-top"><span style="font-size:13px;color:var(--steel);" data-i18n="found_count">ພົບ 48 ລາຍການ</span>
+        <select><option data-i18n="sort_newest">ລຽງຕາມ: ໃໝ່ລ່າສຸດ</option><option data-i18n="sort_price">ລາຄາ ຕ່ຳ→ສູງ</option><option data-i18n="sort_name">ຊື່ ກ-ຮ</option></select></div>
+      <div class="listing-grid">
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-CAB-2540</div><div class="prod-name" data-i18n="p_cable_thw25">ສາຍໄຟ THW 2.5mm² (ມ້ວນ 100m)</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_850">850,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-BRK-40A</div><div class="prod-name" data-i18n="p_mcb40a">ເບກເກີ MCB 40A 1 ໂພລ</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_95">95,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-PNL-12W</div><div class="prod-name" data-i18n="p_panel12">ຕູ້ໄຟ Panel Board 12 ຊ່ອງ</div>
+          <div class="prod-foot"><span class="prod-price ask" data-i18n="ask_price_contact">ຕິດຕໍ່ຂໍລາຄາ</span><span class="badge badge-quote">B2B</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-LED-18W</div><div class="prod-name" data-i18n="p_led18">ຫລອດ LED 18W ແສງຂາວ</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_28">28,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-SW-3G</div><div class="prod-name" data-i18n="p_switch3g">ສະວິດໄຟ 3 ຊ່ອງ</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_32">32,000 ກີບ</span><span class="badge badge-low" data-i18n="badge_lowstock">ເຫລືອໜ້ອຍ</span></div></div></div>
+        <div class="prod-card"><div class="prod-img bracket" data-i18n="prod_img_ph">ຮູບສິນຄ້າ</div><div class="prod-body">
+          <div class="prod-sku">SKU: EL-CAB-4010</div><div class="prod-name" data-i18n="p_cable_vaf40">ສາຍໄຟ VAF 4.0mm² (ມ້ວນ 100m)</div>
+          <div class="prod-foot"><span class="prod-price" data-i18n="pr_1320">1,320,000 ກີບ</span><span class="badge badge-stock" data-i18n="badge_instock">ມີສະຕັອກ</span></div></div></div>
+      </div>
+      <div class="pagination"><button class="active">1</button><button>2</button><button>3</button><button>→</button></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 3. DETAIL ============ -->
+<div class="screen" id="detail">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a>
+      <a href="#" class="mega-trigger" onmouseenter="openMega()" onmouseleave="scheduleCloseMega()"><span data-i18n="nav_products">ສິນຄ້າ</span><span class="care">▾</span></a>
+      <a href="#" data-i18n="nav_services">ບໍລິການ</a>
+      <a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a>
+      <a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="c_elec">ອຸປະກອນໄຟຟ້າ</span> / <span data-i18n="p_mcb40a">ເບກເກີ MCB 40A</span></div>
+  <div class="detail-layout">
+    <div>
+      <div class="gallery-main bracket" data-i18n="gallery_main_ph">ຮູບໃຫຍ່ສິນຄ້າ</div>
+      <div class="gallery-thumbs"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div>
+      <div class="detail-brand">SCHNEIDER ELECTRIC</div>
+      <div class="detail-title" data-i18n="d_title">ເບກເກີ MCB 40A 1 ໂພລ ຮຸ່ນ Acti9</div>
+      <div class="detail-sku">SKU: EL-BRK-40A &nbsp;•&nbsp; <span data-i18n="d_model">ຮຸ່ນ: iC60N-40A</span></div>
+      <div class="detail-price-row">
+        <div class="detail-price"><span data-i18n="pr_95">95,000 ກີບ</span> <span style="font-size:13px;font-weight:400;color:var(--steel);" data-i18n="per_unit">/ ໜ່ວຍ</span></div>
+        <span class="badge badge-stock" data-i18n="d_stock_240">ມີສະຕັອກ 240 ໜ່ວຍ</span>
+      </div>
+      <div class="qty-row">
+        <div class="stepper"><button>−</button><input value="1" class="mono"><button>+</button></div>
+        <span class="moq-note" data-i18n="d_moq">ຈຳນວນສັ່ງຊື້ຂັ້ນຕ່ຳ: 1 ໜ່ວຍ</span>
+      </div>
+      <div class="detail-actions">
+        <button class="btn-primary" data-i18n="d_addcart">🛒 ໃສ່ກະຕ່າ</button>
+        <button class="btn-quote" data-i18n="d_askquote">📄 ຂໍໃບສະເໜີລາຄາ</button>
+      </div>
+      <div class="info-row"><b data-i18n="d_brand_lbl">ຍີ່ຫໍ້</b><span>Schneider Electric</span></div>
+      <div class="info-row"><b data-i18n="d_origin_lbl">ແຫລ່ງຜະລິດ</b><span data-i18n="d_origin_val">ຝຣັ່ງ (France)</span></div>
+      <div class="info-row"><b data-i18n="d_warranty_lbl">ການຮັບປະກັນ</b><span data-i18n="d_warranty_val">12 ເດືອນ</span></div>
+      <div class="info-row"><b data-i18n="d_unit_lbl">ຫົວໜ່ວຍ</b><span data-i18n="d_unit_val">ຊິ້ນ (pcs)</span></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="setDetailTab(this,'tp-desc')" data-i18n="tab_desc">ລາຍລະອຽດ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-spec')" data-i18n="tab_spec">ຂໍ້ມູນສະເພາະ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-doc')" data-i18n="tab_doc">ເອກະສານ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-usage')" data-i18n="tab_usage">ວິທີການໃຊ້ງານ</div>
+    <div class="tab" onclick="setDetailTab(this,'tp-rel')" data-i18n="tab_rel">ສິນຄ້າກ່ຽວຂ້ອງ</div>
+  </div>
+  <div class="tab-panel on" id="tp-desc"><p style="font-size:13.5px;color:var(--steel);line-height:1.8;" data-i18n="tp_desc_txt">ເບກເກີ MCB Acti9 ຈາກ Schneider Electric ອອກແບບສຳລັບປ້ອງກັນວົງຈອນໄຟຟ້າຂະໜາດນ້ອຍ-ກາງ ເໝາະສຳລັບຕູ້ໄຟທີ່ຢູ່ອາໃສ, ຮ້ານຄ້າ ແລະ ອາຄານພານິດ. ຜະລິດຕາມມາດຕະຖານສາກົນ IEC ໃຫ້ຄວາມທົນທານ ແລະ ຄວາມປອດໄພສູງ.</p></div>
+  <div class="tab-panel" id="tp-spec"><div class="spec-table"><table>
+    <tr><td data-i18n="spec_current">ກະແສໄຟ (Current Rating)</td><td>40 A</td></tr>
+    <tr><td data-i18n="spec_poles">ຈຳນວນໂພລ (Poles)</td><td>1P</td></tr>
+    <tr><td data-i18n="spec_voltage">ແຮງດັນໃຊ້ງານ (Voltage)</td><td>230/400 V AC</td></tr>
+    <tr><td data-i18n="spec_breaking">ຄວາມສາມາດຕັດວົງຈອນ (Breaking Capacity)</td><td>6 kA</td></tr>
+    <tr><td data-i18n="spec_standard">ມາດຕະຖານ (Standard)</td><td>IEC 60898-1</td></tr>
+    <tr><td data-i18n="spec_weight">ນ້ຳໜັກ (Weight)</td><td>0.15 kg</td></tr>
+  </table></div></div>
+  <div class="tab-panel" id="tp-doc"><p style="font-size:13.5px;color:var(--steel);">📄 Datasheet_ACTI9_MCB.pdf &nbsp; | &nbsp; 📄 Installation_Manual_LA.pdf &nbsp; | &nbsp; 📄 CE_Certificate.pdf</p></div>
+  <div class="tab-panel" id="tp-usage">
+    <div class="usage-steps">
+      <div class="usage-step"><div class="u-num">01</div><h5 data-i18n="us1_t">ຕິດຕັ້ງເຂົ້າ Panel</h5><p data-i18n="us1_d">ປິດແຫລ່ງໄຟກ່ອນ ແລ້ວຕິດຕັ້ງເບກເກີເຂົ້າ DIN Rail ພາຍໃນຕູ້ໄຟ</p></div>
+      <div class="usage-step"><div class="u-num">02</div><h5 data-i18n="us2_t">ຕໍ່ສາຍໄຟ</h5><p data-i18n="us2_d">ຕໍ່ສາຍເຂົ້າ-ອອກໃຫ້ຖືກຂົ້ວ ໂຕນຫັນແໜ້ນ ຕາມແຮງບິດທີ່ກຳນົດ</p></div>
+      <div class="usage-step"><div class="u-num">03</div><h5 data-i18n="us3_t">ທົດສອບ</h5><p data-i18n="us3_d">ເປີດແຫລ່ງໄຟ ແລະ ທົດສອບການເຮັດວຽກຂອງເບກເກີກ່ອນໃຊ້ງານຈິງ</p></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="tp-rel"><p style="font-size:13px;color:var(--steel);" data-i18n="tp_rel_txt">ຕູ້ໄຟ Panel Board 12 ຊ່ອງ &nbsp;•&nbsp; ສາຍໄຟ THW 2.5mm² &nbsp;•&nbsp; ຄອນແທັກເຕີ 40A</p></div>
+
+
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 4. QUOTE REQUEST FORM (ຟອມໃບສະເໜີລາຄາ) ============ -->
+<div class="screen" id="quote">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">3</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a><a href="#" data-i18n="nav_products">ສິນຄ້າ</a><a href="#" data-i18n="nav_services">ບໍລິການ</a><a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a><a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="bc_quote">ຟອມໃບສະເໜີລາຄາ</span></div>
+  <div class="req-layout">
+    <div>
+      <div class="form-card">
+        <span class="form-type-tag tag-quote" data-i18n="tag_b2b_quote">B2B QUOTATION REQUEST</span>
+        <h3 data-i18n="q_items_h">ລາຍການສິນຄ້າ (2)</h3>
+        <div class="req-item"><div class="th"></div><div class="nm"><span data-i18n="p_panel12">ຕູ້ໄຟ Panel Board 12 ຊ່ອງ</span><span>SKU: EL-PNL-12W</span></div>
+          <div class="stepper"><button>−</button><input value="3" class="mono"><button>+</button></div></div>
+        <div class="req-item" style="border:none;"><div class="th"></div><div class="nm"><span data-i18n="p_motor5hp">ມອເຕີ 3 ເຟສ 5HP</span><span>SKU: MT-PMP-3P5</span></div>
+          <div class="stepper"><button>−</button><input value="2" class="mono"><button>+</button></div></div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="q_contact_h">ຂໍ້ມູນຜູ້ຕິດຕໍ່</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_fullname">ຊື່ ແລະ ນາມສະກຸນ *</label><input data-i18n-ph="ph_name" placeholder="ທ້າວ / ນາງ ..."></div>
+          <div class="field"><label data-i18n="f_phone">ເບີໂທ *</label><input data-i18n-ph="ph_phone" placeholder="020 xxxxxxxx"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_company_lbl">ບໍລິສັດ / ໂຄງການ</label><input data-i18n-ph="ph_company" placeholder="ຊື່ບໍລິສັດ ຫລື ໂຄງການ"></div>
+          <div class="field"><label data-i18n="f_fb_email">Facebook / ອີເມວ</label><input data-i18n-ph="ph_fb_email" placeholder="ລິ້ງ ຫລື ອີເມວ"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="q_project_h">ລາຍລະອຽດໂຄງການ</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_quote_date">ວັນທີ່ຕ້ອງການໃບສະເໜີລາຄາ</label><input data-i18n-ph="ph_date" placeholder="ວັນ/ເດືອນ/ປີ"></div>
+          <div class="field"><label data-i18n="f_province">ແຂວງ / ນະຄອນຫລວງ</label><select><option data-i18n="prov_vte">ນະຄອນຫລວງວຽງຈັນ</option><option data-i18n="prov_lpb">ຫລວງພະບາງ</option></select></div>
+        </div>
+        <div class="field"><textarea rows="3" data-i18n-ph="ph_notes" placeholder="ລາຍລະອຽດເພີ່ມເຕີມ ເຊັ່ນ ເງື່ອນໄຂການຈັດສົ່ງ, ມາດຕະຖານທີ່ຕ້ອງການ..."></textarea></div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <h4 data-i18n="q_summary_h">ສະຫລຸບໃບສະເໜີລາຄາ</h4>
+      <div class="summary-row"><span data-i18n="q_row_panel">ຕູ້ໄຟ Panel Board ×3</span><span data-i18n="ask_price">ຂໍລາຄາ</span></div>
+      <div class="summary-row"><span data-i18n="q_row_motor">ມອເຕີ 3 ເຟສ 5HP ×2</span><span data-i18n="ask_price">ຂໍລາຄາ</span></div>
+      <div class="summary-row total"><span data-i18n="q_total_lbl">ຍອດລວມ</span><span data-i18n="q_total_val">ຈະແຈ້ງໃນໃບສະເໜີ</span></div>
+      <button class="btn-primary" data-i18n="q_submit_btn">ສົ່ງໃບສະເໜີລາຄາ →</button>
+      <div class="summary-note" data-i18n="q_note">* ນີ້ແມ່ນຄຳຂໍໃບສະເໜີລາຄາ (RFQ) — ທີມງານຈະຄິດໄລ່ ແລະ ສົ່ງໃບສະເໜີລາຄາຢ່າງເປັນທາງການໃຫ້ພາຍໃນ 24 ຊົ່ວໂມງ ຜ່ານເບີໂທ ຫລື ອີເມວທີ່ໃຫ້ໄວ້</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 5. PURCHASE ORDER FORM (ຟອມສັ່ງຊື້) ============ -->
+<div class="screen" id="order">
+  <div class="site-header">
+    <div class="header-row1"><div class="header-row1-inner">
+      <div class="logo no-i18n"><span class="mark"></span>NB LAO</div>
+      <div class="search-wrap"><div class="search-box"><input data-i18n-ph="search_ph" placeholder="ຄົ້ນຫາສິນຄ້າ..."><button>🔍</button></div></div>
+      <div class="header-actions">
+        <a class="h-action" href="#">👤 <span data-i18n="login">ເຂົ້າສູ່ລະບົບ</span></a>
+        <a class="h-action" href="#">🛒 <span data-i18n="cart">ກະຕ່າ</span> <span class="badge-cart">2</span></a>
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="header-row2"><div class="nav2">
+      <a href="#" data-i18n="nav_home">ໜ້າຫຼັກ</a><a href="#" data-i18n="nav_products">ສິນຄ້າ</a><a href="#" data-i18n="nav_services">ບໍລິການ</a><a href="#" data-i18n="nav_about">ກ່ຽວກັບເຮົາ</a><a href="#" data-i18n="nav_contact">ຕິດຕໍ່</a>
+    </div></div>
+  </div>
+  <div class="breadcrumb"><span data-i18n="nav_home">ໜ້າຫຼັກ</span> / <span data-i18n="bc_cart">ກະຕ່າ</span> / <span data-i18n="bc_order">ຟອມສັ່ງຊື້</span></div>
+  <div class="req-layout">
+    <div>
+      <div class="form-card">
+        <span class="form-type-tag tag-order" data-i18n="tag_direct_order">DIRECT ORDER — ຈາກກະຕ່າ</span>
+        <h3 data-i18n="o_items_h">ລາຍການສັ່ງຊື້ (2)</h3>
+        <div class="req-item"><div class="th"></div><div class="nm"><span data-i18n="p_mcb40a">ເບກເກີ MCB 40A 1 ໂພລ</span><span>SKU: EL-BRK-40A &nbsp;•&nbsp; <span data-i18n="pr_95">95,000 ກີບ</span>/<span data-i18n="unit_pcs">ໜ່ວຍ</span></span></div>
+          <div class="stepper"><button>−</button><input value="5" class="mono"><button>+</button></div></div>
+        <div class="req-item" style="border:none;"><div class="th"></div><div class="nm"><span data-i18n="p_cable_thw25_100m">ສາຍໄຟ THW 2.5mm² (100m)</span><span>SKU: EL-CAB-2540 &nbsp;•&nbsp; <span data-i18n="pr_850">850,000 ກີບ</span>/<span data-i18n="unit_roll">ມ້ວນ</span></span></div>
+          <div class="stepper"><button>−</button><input value="2" class="mono"><button>+</button></div></div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="o_recipient_h">ຂໍ້ມູນຜູ້ຮັບ</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_fullname">ຊື່ ແລະ ນາມສະກຸນ *</label><input data-i18n-ph="ph_name" placeholder="ທ້າວ / ນາງ ..."></div>
+          <div class="field"><label data-i18n="f_phone">ເບີໂທ *</label><input data-i18n-ph="ph_phone" placeholder="020 xxxxxxxx"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="o_delivery_h">ການຈັດສົ່ງ</h3>
+        <div class="field-row">
+          <div class="field"><label data-i18n="f_province">ແຂວງ / ນະຄອນຫລວງ</label><select><option data-i18n="prov_vte">ນະຄອນຫລວງວຽງຈັນ</option><option data-i18n="prov_lpb">ຫລວງພະບາງ</option></select></div>
+          <div class="field"><label data-i18n="f_city">ເມືອງ</label><input data-i18n-ph="ph_city" placeholder="ເມືອງ..."></div>
+        </div>
+        <div class="field"><label data-i18n="f_address">ທີ່ຢູ່ລະອຽດ</label><textarea rows="2" data-i18n-ph="ph_address" placeholder="ບ້ານ, ຖະໜົນ, ຈຸດສັງເກດ..."></textarea></div>
+      </div>
+      <div class="form-card">
+        <h3 data-i18n="o_payment_h">ການຊຳລະເງິນ</h3>
+        <div class="field"><label data-i18n="f_payment_method">ວິທີຊຳລະເງິນ *</label>
+          <select><option data-i18n="pay_bank">ໂອນຜ່ານທະນາຄານ (Bank Transfer)</option><option data-i18n="pay_cod">ຊຳລະປາຍທາງ (COD)</option><option>OnePay</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <h4 data-i18n="o_summary_h">ສະຫລຸບອໍເດີ້</h4>
+      <div class="summary-row"><span data-i18n="o_row_mcb">ເບກເກີ MCB 40A ×5</span><span>475,000</span></div>
+      <div class="summary-row"><span data-i18n="o_row_cable">ສາຍໄຟ THW 2.5mm ×2</span><span>1,700,000</span></div>
+      <div class="summary-row"><span data-i18n="o_row_shipping">ຄ່າຈັດສົ່ງ</span><span>50,000</span></div>
+      <div class="summary-row total"><span data-i18n="o_total_lbl">ຍອດລວມທັງໝົດ</span><span>2,225,000 <span data-i18n="currency_kip">ກີບ</span></span></div>
+      <button class="btn-primary" data-i18n="o_confirm_btn">ຢືນຢັນສັ່ງຊື້ →</button>
+      <div class="summary-note" data-i18n="o_note">* ຫລັງຈາກສົ່ງອໍເດີ້ ທີມງານຈະຕິດຕໍ່ຢືນຢັນ ແລະ ແຈ້ງຂໍ້ມູນຊຳລະເງິນ (ຖ້າເລືອກໂອນ) ພາຍໃນ 24 ຊົ່ວໂມງ</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4 data-i18n="f_about">NB LAO</h4>
+        <p data-i18n="f_about_p">ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.</p>
+        <div class="footer-social">
+          <a class="soc-ic" href="#" title="Facebook" aria-label="Facebook">📘</a>
+          <a class="soc-ic" href="#" title="LINE" aria-label="LINE">💬</a>
+          <a class="soc-ic" href="#" title="WeChat" aria-label="WeChat">🟢</a>
+          <a class="soc-ic" href="#" title="WhatsApp" aria-label="WhatsApp">📞</a>
+        </div>
+      </div>
+      <div><h4 data-i18n="f_products">ສິນຄ້າ</h4><a href="#" data-i18n="c_elec2">ອຸປະກອນໄຟຟ້າ</a><br><a href="#" data-i18n="f_valve">ວາວ/ທໍ່ນ້ຳ</a><br><a href="#" data-i18n="c_motor2">ມອເຕີ/ປັ໊ມ</a></div>
+      <div><h4 data-i18n="f_company">ບໍລິສັດ</h4><a href="#" data-i18n="nav_about2">ກ່ຽວກັບພວກເຮົາ</a><br><a href="#" data-i18n="nav_contact2">ຕິດຕໍ່</a></div>
+      <div><h4 data-i18n="f_contact">ຕິດຕໍ່</h4><p data-i18n="f_addr">ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888</p></div>
+    </div>
+    <div class="footer-partners">
+      <span class="fp-label" data-i18n="f_partners">ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ</span>
+      <div class="fp-logos">
+        <div class="fp-logo">SCHNEIDER ELECTRIC</div>
+        <div class="fp-logo">SIEMENS</div>
+        <div class="fp-logo">ABB</div>
+        <div class="fp-logo">GRUNDFOS</div>
+        <div class="fp-logo">EDL — ໄຟຟ້າລາວ</div>
+        <div class="fp-logo">LAO CHAMBER OF COMMERCE</div>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="f_bottom">© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ</div>
+  </div>
+</div>
+
+<!-- ============ 6. ADMIN ============ -->
+<div class="screen" id="admin">
+  <div class="admin-shell">
+    <div class="admin-side">
+      <div class="a-logo">NB LAO / ADMIN
+        <div class="lang-dropdown" style="margin-top:10px;">
+          <button class="lang-btn" style="font-size:11px;padding:5px 9px;" onclick="toggleLangMenu(this)">🌐 <span class="cur-lang">LAO</span> ▾</button>
+          <div class="lang-menu"><div class="sel" onclick="setLang('lo')">ພາສາລາວ</div><div onclick="setLang('en')">English</div></div>
+        </div>
+      </div>
+      <div class="admin-link on">📊 <span data-i18n="ad_dashboard">Dashboard</span></div>
+      <div class="admin-link">📦 <span data-i18n="ad_products">ສິນຄ້າ</span></div>
+      <div class="admin-link">🗂️ <span data-i18n="ad_categories">ໝວດໝູ່</span></div>
+      <div class="admin-link">🏷️ <span data-i18n="ad_brands">ຍີ່ຫໍ້</span></div>
+      <div class="admin-link">📄 <span data-i18n="ad_quotes">ໃບສະເໜີລາຄາ</span></div>
+      <div class="admin-link">🧾 <span data-i18n="ad_orders">ອໍເດີ້</span></div>
+      <div class="admin-link">⚙️ <span data-i18n="ad_settings">ຕັ້ງຄ່າ</span></div>
+    </div>
+    <div class="admin-main">
+      <div class="a-stats">
+        <div class="a-stat"><div class="n">14</div><div class="l" data-i18n="ad_stat_new">ຄຳຂໍໃໝ່ວັນນີ້</div></div>
+        <div class="a-stat"><div class="n">6</div><div class="l" data-i18n="ad_stat_pending">ລໍຖ້າສະເໜີລາຄາ</div></div>
+        <div class="a-stat"><div class="n">38.4M</div><div class="l" data-i18n="ad_stat_revenue">ຍອດເດືອນນີ້ (ກີບ)</div></div>
+        <div class="a-stat"><div class="n">7</div><div class="l" data-i18n="ad_stat_lowstock">ສິນຄ້າໃກ້ໝົດສະຕັອກ</div></div>
+      </div>
+      <div class="a-table"><table>
+        <tr><th data-i18n="ad_col_code">ລະຫັດ</th><th data-i18n="ad_col_customer">ລູກຄ້າ</th><th data-i18n="ad_col_type">ປະເພດ</th><th data-i18n="ad_col_total">ຍອດລວມ</th><th data-i18n="ad_col_status">ສະຖານະ</th><th data-i18n="ad_col_date">ວັນທີ</th></tr>
+        <tr><td class="code">NB-2026-0142</td><td>ທ້າວ ວົງໄຊ (ຮ້ານໄຟຟ້າສີສະຫວ່າງ)</td><td data-i18n="ad_type_order">ອໍເດີ້</td><td>2,225,000</td><td><span class="status-pill st-new" data-i18n="ad_st_new">ໃໝ່</span></td><td>19 ສ.ຫ.</td></tr>
+        <tr><td class="code">NB-2026-0141</td><td>ບໍລິສັດ ວຽງຈັນ ກໍ່ສ້າງ ຈຳກັດ</td><td data-i18n="ad_type_quote">ໃບສະເໜີລາຄາ</td><td data-i18n="ask_price">ຂໍລາຄາ</td><td><span class="status-pill st-review" data-i18n="ad_st_review">ກຳລັງກວດ</span></td><td>18 ສ.ຫ.</td></tr>
+        <tr><td class="code">NB-2026-0140</td><td>ນາງ ສຸກສະຫວັນ</td><td data-i18n="ad_type_order">ອໍເດີ້</td><td>340,000</td><td><span class="status-pill st-done" data-i18n="ad_st_done">ຢືນຢັນແລ້ວ</span></td><td>17 ສ.ຫ.</td></tr>
+        <tr><td class="code">NB-2026-0139</td><td>ໂຮງງານ ໄຟຟ້າພັດທະນາ</td><td data-i18n="ad_type_quote">ໃບສະເໜີລາຄາ</td><td data-i18n="ask_price">ຂໍລາຄາ</td><td><span class="status-pill st-review" data-i18n="ad_st_review">ກຳລັງກວດ</span></td><td>17 ສ.ຫ.</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== PROMO SLIDER (auto-advance) ===================== */
+let promoIdx = 0;
+let promoTimer = null;
+function promoRender(){
+  const slides = document.querySelectorAll('.promo-slide');
+  document.getElementById('promoTrack').style.transform = `translateX(-${promoIdx*100}%)`;
+  const dots = document.getElementById('promoDots');
+  dots.innerHTML = [...slides].map((_,i)=>`<span class="${i===promoIdx?'on':''}" onclick="promoSet(${i})"></span>`).join('');
+}
+function promoSet(i){ promoIdx = i; promoRender(); promoResetTimer(); }
+function promoGo(dir){
+  const total = document.querySelectorAll('.promo-slide').length;
+  promoIdx = (promoIdx + dir + total) % total;
+  promoRender(); promoResetTimer();
+}
+function promoResetTimer(){
+  clearInterval(promoTimer);
+  promoTimer = setInterval(()=>promoGo(1), 4500);
+}
+promoRender();
+promoResetTimer();
+
+/* ===================== DATA: 9 main categories ===================== */
+let currentLang = 'lo';
+const CATS = [
+ {id:'elec', icon:'⚡', name:{lo:'ອຸປະກອນໄຟຟ້າ',en:'Electrical Equipment'}, sub:{
+   lo:['ເບກເກີ (Circuit Breakers)','MCCB / MCB','Contactor & Relay','ສະວິດ & Disconnector','ຕູ້ໄຟ / MDB','ໝໍ້ແປງໄຟຟ້າ','ອຸປະກອນປ້ອງກັນຟ້າຜ່າ','ຟິວ ແລະ ອຸປະກອນປ້ອງກັນ','ເຄື່ອງມືວັດແທກໄຟຟ້າ','ອຸປະກອນເສີມໄຟຟ້າ'],
+   en:['Circuit Breakers','MCCB / MCB','Contactor & Relay','Switches & Disconnectors','Panel Boards / MDB','Transformers','Surge Protection Devices','Fuses & Protection Devices','Electrical Measuring Tools','Electrical Accessories']}},
+ {id:'mech', icon:'⚙️', name:{lo:'ອຸປະກອນກົນຈັກ',en:'Mechanical Components'}, sub:{
+   lo:['ຕລັບລູກປືນ (Bearings)','ເກຍ & ກະປຸກເກຍ','Coupling','ວາວ (Valves)','ປັ໊ມ (Pumps)','ອຸປະກອນລົມ (Pneumatic)','ອຸປະກອນໄຮໂດຼລິກ','Mechanical Seal','ອຸປະກອນອຸດສາຫະກຳ','ອຸປະກອນໂຮງງານໄຟຟ້າ'],
+   en:['Bearings','Gears & Gearboxes','Coupling','Valves','Pumps','Pneumatic Equipment','Hydraulic Equipment','Mechanical Seals','Industrial Equipment','Power Plant Equipment']}},
+ {id:'tool', icon:'🛠️', name:{lo:'ເຄື່ອງມືວິສະວະກຳ',en:'Engineering Tools'}, sub:{
+   lo:['ເຄື່ອງມືມື','ເຄື່ອງມືໄຟຟ້າ','ເຄື່ອງມືວັດແທກ','ເຄື່ອງມືຕັດ','ເຄື່ອງມືເຈາະ','ເຄື່ອງມືຂັດ','ເຄື່ອງມືເຊື່ອມ','ເຄື່ອງມືປັ້ນແຮງບິດ','ເຄື່ອງມືຫ້ອງກົນຈັກ','ອາໄຫລ່ເຄື່ອງມື'],
+   en:['Hand Tools','Power Tools','Measuring Tools','Cutting Tools','Drilling Tools','Grinding Tools','Welding Tools','Torque Tools','Workshop Tools','Tool Spare Parts']}},
+ {id:'safe', icon:'🦺', name:{lo:'ຄວາມປອດໄພ & ດັບເພີງ',en:'Safety & Fire Protection'}, sub:{
+   lo:['ໝວກນິລະໄພ','ເກີບນິລະໄພ','ຖົງມືນິລະໄພ','ແວ່ນຕານິລະໄພ','ຊຸດປ້ອງກັນ','ອຸປະກອນປ້ອງກັນລະບົບຫາຍໃຈ','ອຸປະກອນປ້ອງກັນການຕົກ','ຖັງດັບເພີງ','ສາຍດັບເພີງ','ຫົວດັບເພີງ'],
+   en:['Safety Helmets','Safety Shoes','Safety Gloves','Safety Glasses','Protective Clothing','Respiratory Protection','Fall Protection','Fire Extinguishers','Fire Hoses','Fire Sprinkler Heads']}},
+ {id:'it', icon:'🖥️', name:{lo:'IT, ເຄື່ອງໃຊ້ໄຟຟ້າ & CCTV',en:'IT, Appliances & CCTV'}, sub:{
+   lo:['ຄອມພິວເຕີ & ອຸປະກອນເສີມ','ອຸປະກອນເຄືອຂ່າຍ','ກ້ອງວົງຈອນປິດ','NVR / DVR','ຈໍມອນິເຕີ','ເຄື່ອງພິມ','UPS','ເຄື່ອງໃຊ້ໄຟຟ້າ','Access Control'],
+   en:['Computers & Accessories','Network Equipment','CCTV Cameras','NVR / DVR','Monitors','Printers','UPS','Home Appliances','Access Control']}},
+ {id:'comm', icon:'🔌', name:{lo:'ສາຍ & ອຸປະກອນສື່ສານ',en:'Cables & Communication'}, sub:{
+   lo:['ສາຍໄຟກຳລັງ','ສາຍຄວບຄຸມ','ສາຍສັນຍານ','ສາຍໄຍແກ້ວ','ອຸປະກອນສື່ສານ','ອຸປະກອນເສີມເຄືອຂ່າຍ','Cable Gland','Cable Tray'],
+   en:['Power Cables','Control Cables','Signal Cables','Fiber Optic Cables','Communication Equipment','Network Accessories','Cable Gland','Cable Tray']}},
+ {id:'office', icon:'🗄️', name:{lo:'ເຟີນີເຈີ & ອຸປະກອນຫ້ອງການ',en:'Furniture & Office Supplies'}, sub:{
+   lo:['ໂຕະການ','ຕັ່ງການ','ຕູ້ເກັບເອກະສານ','ເຄື່ອງພິມ & ໝຶກ','ອຸປະກອນຫ້ອງການ'],
+   en:['Office Desks','Office Chairs','Filing Cabinets','Printers & Ink','Office Supplies']}},
+ {id:'water', icon:'💧', name:{lo:'ນ້ຳ & ສານເຄມີ',en:'Water & Chemicals'}, sub:{
+   lo:['ອຸປະກອນບຳບັດນ້ຳ','ເຄື່ອງວັດຄຸນນະພາບນ້ຳ','ເຄື່ອງກັ່ນນ້ຳ','ປັ໊ມ & ຕົວກອງ','ສານເຄມີອຸດສາຫະກຳ'],
+   en:['Water Treatment Equipment','Water Quality Meters','Water Distillers','Pumps & Filters','Industrial Chemicals']}},
+ {id:'motor', icon:'🔩', name:{lo:'ມອເຕີ, ປັ໊ມນ້ຳ & ສາຍພານ',en:'Motors, Pumps & Belts'}, sub:{
+   lo:['ມອເຕີໄຟຟ້າ','ປັ໊ມນ້ຳ','ປັ໊ມຈຸ່ມ','ປັ໊ມ Centrifugal','ອາໄຫລ່ມອເຕີ','ສາຍພານ V-Belt','ສາຍພານ Timing','Pulley'],
+   en:['Electric Motors','Water Pumps','Submersible Pumps','Centrifugal Pumps','Motor Spare Parts','V-Belts','Timing Belts','Pulleys']}}
+];
+
+/* ===================== MEGA MENU ===================== */
+let megaCloseTimer = null;
+function buildMega(activeId){
+  const col1 = document.getElementById('megaCol1');
+  const col2 = document.getElementById('megaCol2');
+  const col3 = document.getElementById('megaCol3');
+  if(!col1) return;
+  col1.innerHTML = CATS.map(c=>`<div class="mega-cat-item ${c.id===activeId?'on':''}" onmouseenter="renderMegaCols('${c.id}')">
+      <span class="ic">${c.icon}</span><span>${c.name[currentLang]}</span><span class="arrow">›</span></div>`).join('');
+  renderMegaCols(activeId);
+}
+function renderMegaCols(id){
+  document.querySelectorAll('.mega-cat-item').forEach(el=>el.classList.remove('on'));
+  const cat = CATS.find(c=>c.id===id);
+  if(!cat) return;
+  [...document.querySelectorAll('.mega-cat-item')].forEach(el=>{
+    if(el.textContent.includes(cat.name[currentLang])) el.classList.add('on');
+  });
+  const subList = cat.sub[currentLang];
+  document.getElementById('megaCol2').innerHTML = `<h5>${cat.name[currentLang]}</h5>` + subList.map((s,i)=>
+    `<div class="mega-sub-item"><span><span class="n">${String(i+1).padStart(2,'0')}</span>${s}</span><span>›</span></div>`).join('');
+  const popularLabel = currentLang==='lo' ? 'ຍອດນິຍົມ' : 'Popular';
+  const viewAllLabel = currentLang==='lo' ? `ເບິ່ງທັງໝົດໃນ ${cat.name[currentLang]} →` : `View all in ${cat.name[currentLang]} →`;
+  document.getElementById('megaCol3').innerHTML = `<h5>${popularLabel}</h5>` + subList.slice(0,4).map(s=>
+    `<div class="mega-sub-item"><span>${s}</span></div>`).join('') +
+    `<a class="view-all" href="#">${viewAllLabel}</a>`;
+}
+function openMega(){
+  clearTimeout(megaCloseTimer);
+  buildMega(CATS[0].id);
+  document.getElementById('megaPanel').classList.add('open');
+  document.querySelector('.mega-trigger').classList.add('open');
+}
+function scheduleCloseMega(){
+  megaCloseTimer = setTimeout(()=>{
+    document.getElementById('megaPanel').classList.remove('open');
+    document.querySelector('.mega-trigger').classList.remove('open');
+  }, 200);
+}
+function cancelCloseMega(){ clearTimeout(megaCloseTimer); }
+
+/* ===================== SIDEBAR CATEGORY ACCORDION ===================== */
+function buildAccordion(){
+  const wrap = document.getElementById('catAccordion');
+  if(!wrap) return;
+  wrap.innerHTML = CATS.map((c,ci)=>`
+    <div class="cat-acc ${ci===0?'open':''}" id="acc-${c.id}">
+      <div class="cat-acc-head" onclick="toggleAcc('${c.id}')"><span class="ic">${c.icon}</span><span>${c.name[currentLang]}</span><span class="chev">▸</span></div>
+      <div class="cat-acc-body ${ci===0?'open':''}">${c.sub[currentLang].map(s=>`<div>${s}</div>`).join('')}</div>
+    </div>`).join('');
+}
+function toggleAcc(id){
+  const el = document.getElementById('acc-'+id);
+  el.classList.toggle('open');
+  el.querySelector('.cat-acc-body').classList.toggle('open');
+}
+buildAccordion();
+
+/* ===================== LANGUAGE DROPDOWN ===================== */
+function toggleLangMenu(btn){
+  const menu = btn.nextElementSibling;
+  document.querySelectorAll('.lang-menu').forEach(m=>{ if(m!==menu) m.classList.remove('open'); });
+  menu.classList.toggle('open');
+}
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('.lang-dropdown')){
+    document.querySelectorAll('.lang-menu').forEach(m=>m.classList.remove('open'));
+  }
+});
+
+const I18N = {
+  search_ph:{lo:'ຄົ້ນຫາສິນຄ້າ...', en:'Search products...'},
+  login:{lo:'ເຂົ້າສູ່ລະບົບ', en:'Login'},
+  cart:{lo:'ກະຕ່າ', en:'Cart'},
+  nav_home:{lo:'ໜ້າຫຼັກ', en:'Home'},
+  nav_products:{lo:'ສິນຄ້າ', en:'Products'},
+  nav_services:{lo:'ບໍລິການ', en:'Services'},
+  nav_about:{lo:'ກ່ຽວກັບເຮົາ', en:'About Us'},
+  nav_contact:{lo:'ຕິດຕໍ່', en:'Contact'},
+  nav_about2:{lo:'ກ່ຽວກັບພວກເຮົາ', en:'About Us'},
+  nav_contact2:{lo:'ຕິດຕໍ່', en:'Contact'},
+  hero_title:{lo:'ອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບຊຸດ ສຳລັບໂຄງການ ແລະ ຮ້ານຄ້າ', en:'Complete Industrial & Electrical Equipment for Projects and Retailers'},
+  hero_desc:{lo:'ຄົ້ນຫາ, ປຽບທຽບ ແລະ ຂໍລາຄາອຸປະກອນຈາກຫລາຍຍີ່ຫໍ້ຊັ້ນນຳ ພ້ອມທີມງານດູແລການສັ່ງຊື້ໂດຍກົງ', en:'Search, compare, and request quotes from leading brands — with a dedicated team supporting every order'},
+  hero_btn1:{lo:'ເບິ່ງສິນຄ້າທັງໝົດ', en:'View All Products'},
+  hero_btn2:{lo:'ຂໍລາຄາດ່ວນ →', en:'Quick Quote →'},
+  hero_live:{lo:'ຄຳຂໍລ່າສຸດ / LIVE', en:'Latest Requests / LIVE'},
+  ask_price:{lo:'ຂໍລາຄາ', en:'Ask Price'},
+  cat_heading:{lo:'ໝວດໝູ່ສິນຄ້າ', en:'Product Categories'},
+  featured_heading:{lo:'ສິນຄ້າແນະນຳ', en:'Featured Products'},
+  steps_heading:{lo:'ວິທີສັ່ງຊື້', en:'How to Order'},
+  view_all:{lo:'ເບິ່ງທັງໝົດ →', en:'View All →'},
+  c_elec:{lo:'ອຸປະກອນໄຟຟ້າ', en:'Electrical Equipment'},
+  c_elec2:{lo:'ອຸປະກອນໄຟຟ້າ', en:'Electrical Equipment'},
+  c_mech:{lo:'ອຸປະກອນກົນຈັກ', en:'Mechanical Components'},
+  c_tool:{lo:'ເຄື່ອງມືວິສະວະກຳ', en:'Engineering Tools'},
+  c_safe:{lo:'ຄວາມປອດໄພ', en:'Safety Equipment'},
+  c_motor:{lo:'ມອເຕີ / ປັ໊ມ', en:'Motors / Pumps'},
+  c_motor2:{lo:'ມອເຕີ/ປັ໊ມ', en:'Motors/Pumps'},
+  c_water:{lo:'ນ້ຳ / ສານເຄມີ', en:'Water / Chemicals'},
+  f_valve:{lo:'ວາວ/ທໍ່ນ້ຳ', en:'Valves/Piping'},
+  s1_t:{lo:'ເລືອກສິນຄ້າ', en:'Choose Products'},
+  s1_d:{lo:'ຄົ້ນຫາ ຫລື ເລືອກຈາກໝວດໝູ່ ແລ້ວເລືອກໃສ່ກະຕ່າ ຫລື ຂໍໃບສະເໜີລາຄາ', en:'Search or browse categories, then add to cart or request a quotation'},
+  s2_t:{lo:'ສົ່ງຄຳຂໍ', en:'Submit Request'},
+  s2_d:{lo:'ໃສ່ຂໍ້ມູນຕິດຕໍ່ ແລະ ສະຖານທີ່ຈັດສົ່ງ', en:'Enter contact details and delivery location'},
+  s3_t:{lo:'ຮັບການຢືນຢັນ', en:'Get Confirmation'},
+  s3_d:{lo:'ທີມງານຕິດຕໍ່ກັບພາຍໃນ 24 ຊົ່ວໂມງ ເພື່ອຢືນຢັນລາຄາ ແລະ ຈັດສົ່ງ', en:'Our team contacts you within 24 hours to confirm pricing and delivery'},
+  f_about:{lo:'NB LAO', en:'NB LAO'},
+  f_about_p:{lo:'ຜູ້ຈຳໜ່າຍອຸປະກອນອຸດສາຫະກຳ ແລະ ໄຟຟ້າ ຄົບວົງຈອນ ສຳລັບຮ້ານຄ້າ ແລະ ໂຄງການ.', en:'Full-service industrial and electrical equipment supplier for retailers and projects.'},
+  f_products:{lo:'ສິນຄ້າ', en:'Products'},
+  f_company:{lo:'ບໍລິສັດ', en:'Company'},
+  f_contact:{lo:'ຕິດຕໍ່', en:'Contact'},
+  f_addr:{lo:'ບ້ານ​ໜອງ​ບອນ, ນະຄອນຫລວງວຽງຈັນ<br>020 5555 8888', en:'Nongbon Village, Vientiane Capital<br>020 5555 8888'},
+  f_bottom:{lo:'© 2026 NB Lao — ຕົ້ນແບບ Wireframe, ຍັງບໍ່ແມ່ນຂໍ້ມູນຈິງ', en:'© 2026 NB Lao — Wireframe Prototype, not real data'},
+  f_partners:{lo:'ຄູ່ຮ່ວມທຸລະກິດ / ຕົວແທນຈຳໜ່າຍ', en:'Business Partners / Distributors'},
+
+  /* ---- listing filters ---- */
+  filt_cat:{lo:'ໝວດໝູ່ສິນຄ້າ', en:'Product Categories'},
+  filt_brand:{lo:'ຍີ່ຫໍ້', en:'Brand'},
+  filt_volt:{lo:'ຂໍ້ມູນສະເພາະ — ແຮງດັນ', en:'Specification — Voltage'},
+  filt_status:{lo:'ສະຖານະ', en:'Status'},
+  filt_instock:{lo:'ມີສະຕັອກເທົ່ານັ້ນ', en:'In Stock Only'},
+  filt_new:{lo:'ສິນຄ້າໃໝ່', en:'New Arrivals'},
+  filt_promo:{lo:'ກຳລັງຫລຸດລາຄາ', en:'On Sale'},
+  filt_bestseller:{lo:'ສິນຄ້າຂາຍດີ', en:'Best Sellers'},
+  filt_quoteonly:{lo:'ສະເພາະຂໍລາຄາ (B2B)', en:'Quote Only (B2B)'},
+  found_count:{lo:'ພົບ 48 ລາຍການ', en:'48 items found'},
+  sort_newest:{lo:'ລຽງຕາມ: ໃໝ່ລ່າສຸດ', en:'Sort: Newest'},
+  sort_price:{lo:'ລາຄາ ຕ່ຳ→ສູງ', en:'Price: Low to High'},
+  sort_name:{lo:'ຊື່ ກ-ຮ', en:'Name: A-Z'},
+
+  /* ---- product names / prices / badges shared across pages ---- */
+  prod_img_ph:{lo:'ຮູບສິນຄ້າ', en:'Product Image'},
+  gallery_main_ph:{lo:'ຮູບໃຫຍ່ສິນຄ້າ', en:'Main Product Image'},
+  ask_price_contact:{lo:'ຕິດຕໍ່ຂໍລາຄາ', en:'Contact for Price'},
+  badge_instock:{lo:'ມີສະຕັອກ', en:'In Stock'},
+  badge_lowstock:{lo:'ເຫລືອໜ້ອຍ', en:'Low Stock'},
+  p_cable_thw25:{lo:'ສາຍໄຟ THW 2.5mm² (ມ້ວນ 100m)', en:'THW Cable 2.5mm² (100m roll)'},
+  p_cable_thw25_100m:{lo:'ສາຍໄຟ THW 2.5mm² (100m)', en:'THW Cable 2.5mm² (100m)'},
+  p_cable_vaf40:{lo:'ສາຍໄຟ VAF 4.0mm² (ມ້ວນ 100m)', en:'VAF Cable 4.0mm² (100m roll)'},
+  p_motor5hp_ind:{lo:'ມອເຕີ 3 ເຟສ 5HP ຮຸ່ນ Industrial', en:'3-Phase Motor 5HP Industrial Series'},
+  p_motor5hp:{lo:'ມອເຕີ 3 ເຟສ 5HP', en:'3-Phase Motor 5HP'},
+  p_ballvalve2in:{lo:'ວາວປິດເປີດ Ball Valve 2 ນິ້ວ', en:'Ball Valve 2 inch'},
+  p_helmet_ce:{lo:'ໝວກນິລະໄພ Class E ມາດຕະຖານ', en:'Safety Helmet Class E Standard'},
+  p_mcb40a:{lo:'ເບກເກີ MCB 40A 1 ໂພລ', en:'MCB Circuit Breaker 40A 1 Pole'},
+  p_panel12:{lo:'ຕູ້ໄຟ Panel Board 12 ຊ່ອງ', en:'Panel Board 12-Way'},
+  p_led18:{lo:'ຫລອດ LED 18W ແສງຂາວ', en:'LED Bulb 18W Daylight'},
+  p_switch3g:{lo:'ສະວິດໄຟ 3 ຊ່ອງ', en:'Light Switch 3-Gang'},
+  pr_850:{lo:'850,000 ກີບ', en:'850,000 LAK'},
+  pr_95:{lo:'95,000 ກີບ', en:'95,000 LAK'},
+  pr_185:{lo:'185,000 ກີບ', en:'185,000 LAK'},
+  pr_65:{lo:'65,000 ກີບ', en:'65,000 LAK'},
+  pr_28:{lo:'28,000 ກີບ', en:'28,000 LAK'},
+  pr_32:{lo:'32,000 ກີບ', en:'32,000 LAK'},
+  pr_1320:{lo:'1,320,000 ກີບ', en:'1,320,000 LAK'},
+  unit_pcs:{lo:'ໜ່ວຍ', en:'unit'},
+  unit_roll:{lo:'ມ້ວນ', en:'roll'},
+  currency_kip:{lo:'ກີບ', en:'LAK'},
+
+  /* ---- detail page ---- */
+  d_title:{lo:'ເບກເກີ MCB 40A 1 ໂພລ ຮຸ່ນ Acti9', en:'MCB Circuit Breaker 40A 1 Pole — Acti9 Series'},
+  d_model:{lo:'ຮຸ່ນ: iC60N-40A', en:'Model: iC60N-40A'},
+  per_unit:{lo:'/ ໜ່ວຍ', en:'/ unit'},
+  d_stock_240:{lo:'ມີສະຕັອກ 240 ໜ່ວຍ', en:'In stock: 240 units'},
+  d_moq:{lo:'ຈຳນວນສັ່ງຊື້ຂັ້ນຕ່ຳ: 1 ໜ່ວຍ', en:'Minimum order: 1 unit'},
+  d_addcart:{lo:'🛒 ໃສ່ກະຕ່າ', en:'🛒 Add to Cart'},
+  d_askquote:{lo:'📄 ຂໍໃບສະເໜີລາຄາ', en:'📄 Request Quote'},
+  d_brand_lbl:{lo:'ຍີ່ຫໍ້', en:'Brand'},
+  d_origin_lbl:{lo:'ແຫລ່ງຜະລິດ', en:'Origin'},
+  d_origin_val:{lo:'ຝຣັ່ງ (France)', en:'France'},
+  d_warranty_lbl:{lo:'ການຮັບປະກັນ', en:'Warranty'},
+  d_warranty_val:{lo:'12 ເດືອນ', en:'12 months'},
+  d_unit_lbl:{lo:'ຫົວໜ່ວຍ', en:'Unit'},
+  d_unit_val:{lo:'ຊິ້ນ (pcs)', en:'pcs'},
+  tab_desc:{lo:'ລາຍລະອຽດ', en:'Description'},
+  tab_spec:{lo:'ຂໍ້ມູນສະເພາະ', en:'Specifications'},
+  tab_doc:{lo:'ເອກະສານ', en:'Documents'},
+  tab_usage:{lo:'ວິທີການໃຊ້ງານ', en:'How to Use'},
+  tab_rel:{lo:'ສິນຄ້າກ່ຽວຂ້ອງ', en:'Related Products'},
+  tp_desc_txt:{lo:'ເບກເກີ MCB Acti9 ຈາກ Schneider Electric ອອກແບບສຳລັບປ້ອງກັນວົງຈອນໄຟຟ້າຂະໜາດນ້ອຍ-ກາງ ເໝາະສຳລັບຕູ້ໄຟທີ່ຢູ່ອາໃສ, ຮ້ານຄ້າ ແລະ ອາຄານພານິດ. ຜະລິດຕາມມາດຕະຖານສາກົນ IEC ໃຫ້ຄວາມທົນທານ ແລະ ຄວາມປອດໄພສູງ.', en:'The Acti9 MCB from Schneider Electric is designed to protect small to medium electrical circuits, suitable for residential, retail, and commercial buildings. Manufactured to international IEC standards for high durability and safety.'},
+  spec_current:{lo:'ກະແສໄຟ (Current Rating)', en:'Current Rating'},
+  spec_poles:{lo:'ຈຳນວນໂພລ (Poles)', en:'Poles'},
+  spec_voltage:{lo:'ແຮງດັນໃຊ້ງານ (Voltage)', en:'Operating Voltage'},
+  spec_breaking:{lo:'ຄວາມສາມາດຕັດວົງຈອນ (Breaking Capacity)', en:'Breaking Capacity'},
+  spec_standard:{lo:'ມາດຕະຖານ (Standard)', en:'Standard'},
+  spec_weight:{lo:'ນ້ຳໜັກ (Weight)', en:'Weight'},
+  us1_t:{lo:'ຕິດຕັ້ງເຂົ້າ Panel', en:'Install into Panel'},
+  us1_d:{lo:'ປິດແຫລ່ງໄຟກ່ອນ ແລ້ວຕິດຕັ້ງເບກເກີເຂົ້າ DIN Rail ພາຍໃນຕູ້ໄຟ', en:'Turn off the power supply first, then mount the breaker onto the DIN rail inside the panel'},
+  us2_t:{lo:'ຕໍ່ສາຍໄຟ', en:'Connect Wiring'},
+  us2_d:{lo:'ຕໍ່ສາຍເຂົ້າ-ອອກໃຫ້ຖືກຂົ້ວ ໂຕນຫັນແໜ້ນ ຕາມແຮງບິດທີ່ກຳນົດ', en:'Connect the in/out wires to the correct terminals and tighten to the specified torque'},
+  us3_t:{lo:'ທົດສອບ', en:'Test'},
+  us3_d:{lo:'ເປີດແຫລ່ງໄຟ ແລະ ທົດສອບການເຮັດວຽກຂອງເບກເກີກ່ອນໃຊ້ງານຈິງ', en:'Turn the power back on and test the breaker before actual use'},
+  tp_rel_txt:{lo:'ຕູ້ໄຟ Panel Board 12 ຊ່ອງ &nbsp;•&nbsp; ສາຍໄຟ THW 2.5mm² &nbsp;•&nbsp; ຄອນແທັກເຕີ 40A', en:'Panel Board 12-Way &nbsp;•&nbsp; THW Cable 2.5mm² &nbsp;•&nbsp; Contactor 40A'},
+
+  /* ---- breadcrumbs ---- */
+  bc_quote:{lo:'ຟອມໃບສະເໜີລາຄາ', en:'Quotation Request Form'},
+  bc_cart:{lo:'ກະຕ່າ', en:'Cart'},
+  bc_order:{lo:'ຟອມສັ່ງຊື້', en:'Purchase Order Form'},
+
+  /* ---- quote form ---- */
+  tag_b2b_quote:{lo:'B2B QUOTATION REQUEST', en:'B2B QUOTATION REQUEST'},
+  q_items_h:{lo:'ລາຍການສິນຄ້າ (2)', en:'Item List (2)'},
+  q_contact_h:{lo:'ຂໍ້ມູນຜູ້ຕິດຕໍ່', en:'Contact Information'},
+  q_project_h:{lo:'ລາຍລະອຽດໂຄງການ', en:'Project Details'},
+  q_summary_h:{lo:'ສະຫລຸບໃບສະເໜີລາຄາ', en:'Quotation Summary'},
+  q_row_panel:{lo:'ຕູ້ໄຟ Panel Board ×3', en:'Panel Board ×3'},
+  q_row_motor:{lo:'ມອເຕີ 3 ເຟສ 5HP ×2', en:'3-Phase Motor 5HP ×2'},
+  q_total_lbl:{lo:'ຍອດລວມ', en:'Total'},
+  q_total_val:{lo:'ຈະແຈ້ງໃນໃບສະເໜີ', en:'To be confirmed in quotation'},
+  q_submit_btn:{lo:'ສົ່ງໃບສະເໜີລາຄາ →', en:'Submit Quote Request →'},
+  q_note:{lo:'* ນີ້ແມ່ນຄຳຂໍໃບສະເໜີລາຄາ (RFQ) — ທີມງານຈະຄິດໄລ່ ແລະ ສົ່ງໃບສະເໜີລາຄາຢ່າງເປັນທາງການໃຫ້ພາຍໃນ 24 ຊົ່ວໂມງ ຜ່ານເບີໂທ ຫລື ອີເມວທີ່ໃຫ້ໄວ້', en:'* This is a Request for Quotation (RFQ) — our team will calculate pricing and send an official quotation within 24 hours via the phone number or email provided'},
+  ask_price:{lo:'ຂໍລາຄາ', en:'Ask Price'},
+
+  /* ---- order form ---- */
+  tag_direct_order:{lo:'DIRECT ORDER — ຈາກກະຕ່າ', en:'DIRECT ORDER — FROM CART'},
+  o_items_h:{lo:'ລາຍການສັ່ງຊື້ (2)', en:'Order Items (2)'},
+  o_recipient_h:{lo:'ຂໍ້ມູນຜູ້ຮັບ', en:'Recipient Information'},
+  o_delivery_h:{lo:'ການຈັດສົ່ງ', en:'Delivery'},
+  o_payment_h:{lo:'ການຊຳລະເງິນ', en:'Payment'},
+  o_summary_h:{lo:'ສະຫລຸບອໍເດີ້', en:'Order Summary'},
+  o_row_mcb:{lo:'ເບກເກີ MCB 40A ×5', en:'MCB Circuit Breaker 40A ×5'},
+  o_row_cable:{lo:'ສາຍໄຟ THW 2.5mm ×2', en:'THW Cable 2.5mm ×2'},
+  o_row_shipping:{lo:'ຄ່າຈັດສົ່ງ', en:'Shipping Fee'},
+  o_total_lbl:{lo:'ຍອດລວມທັງໝົດ', en:'Grand Total'},
+  o_confirm_btn:{lo:'ຢືນຢັນສັ່ງຊື້ →', en:'Confirm Order →'},
+  o_note:{lo:'* ຫລັງຈາກສົ່ງອໍເດີ້ ທີມງານຈະຕິດຕໍ່ຢືນຢັນ ແລະ ແຈ້ງຂໍ້ມູນຊຳລະເງິນ (ຖ້າເລືອກໂອນ) ພາຍໃນ 24 ຊົ່ວໂມງ', en:'* After submitting your order, our team will contact you to confirm and provide payment details (if bank transfer is selected) within 24 hours'},
+
+  /* ---- shared form fields ---- */
+  f_fullname:{lo:'ຊື່ ແລະ ນາມສະກຸນ *', en:'Full Name *'},
+  f_phone:{lo:'ເບີໂທ *', en:'Phone Number *'},
+  f_company_lbl:{lo:'ບໍລິສັດ / ໂຄງການ', en:'Company / Project'},
+  f_fb_email:{lo:'Facebook / ອີເມວ', en:'Facebook / Email'},
+  f_quote_date:{lo:'ວັນທີ່ຕ້ອງການໃບສະເໜີລາຄາ', en:'Date Quote Needed'},
+  f_province:{lo:'ແຂວງ / ນະຄອນຫລວງ', en:'Province / Capital'},
+  f_city:{lo:'ເມືອງ', en:'District'},
+  f_address:{lo:'ທີ່ຢູ່ລະອຽດ', en:'Detailed Address'},
+  f_payment_method:{lo:'ວິທີຊຳລະເງິນ *', en:'Payment Method *'},
+  ph_name:{lo:'ທ້າວ / ນາງ ...', en:'Mr. / Ms. ...'},
+  ph_phone:{lo:'020 xxxxxxxx', en:'020 xxxxxxxx'},
+  ph_company:{lo:'ຊື່ບໍລິສັດ ຫລື ໂຄງການ', en:'Company or project name'},
+  ph_fb_email:{lo:'ລິ້ງ ຫລື ອີເມວ', en:'Link or email'},
+  ph_date:{lo:'ວັນ/ເດືອນ/ປີ', en:'DD/MM/YYYY'},
+  ph_notes:{lo:'ລາຍລະອຽດເພີ່ມເຕີມ ເຊັ່ນ ເງື່ອນໄຂການຈັດສົ່ງ, ມາດຕະຖານທີ່ຕ້ອງການ...', en:'Additional details such as delivery terms, required standards...'},
+  ph_city:{lo:'ເມືອງ...', en:'District...'},
+  ph_address:{lo:'ບ້ານ, ຖະໜົນ, ຈຸດສັງເກດ...', en:'Village, street, landmark...'},
+  prov_vte:{lo:'ນະຄອນຫລວງວຽງຈັນ', en:'Vientiane Capital'},
+  prov_lpb:{lo:'ຫລວງພະບາງ', en:'Luang Prabang'},
+  pay_bank:{lo:'ໂອນຜ່ານທະນາຄານ (Bank Transfer)', en:'Bank Transfer'},
+  pay_cod:{lo:'ຊຳລະປາຍທາງ (COD)', en:'Cash on Delivery (COD)'},
+
+  /* ---- admin ---- */
+  ad_dashboard:{lo:'Dashboard', en:'Dashboard'},
+  ad_products:{lo:'ສິນຄ້າ', en:'Products'},
+  ad_categories:{lo:'ໝວດໝູ່', en:'Categories'},
+  ad_brands:{lo:'ຍີ່ຫໍ້', en:'Brands'},
+  ad_quotes:{lo:'ໃບສະເໜີລາຄາ', en:'Quotations'},
+  ad_orders:{lo:'ອໍເດີ້', en:'Orders'},
+  ad_settings:{lo:'ຕັ້ງຄ່າ', en:'Settings'},
+  ad_stat_new:{lo:'ຄຳຂໍໃໝ່ວັນນີ້', en:'New Requests Today'},
+  ad_stat_pending:{lo:'ລໍຖ້າສະເໜີລາຄາ', en:'Awaiting Quotation'},
+  ad_stat_revenue:{lo:'ຍອດເດືອນນີ້ (ກີບ)', en:'Revenue This Month (LAK)'},
+  ad_stat_lowstock:{lo:'ສິນຄ້າໃກ້ໝົດສະຕັອກ', en:'Low Stock Items'},
+  ad_col_code:{lo:'ລະຫັດ', en:'Code'},
+  ad_col_customer:{lo:'ລູກຄ້າ', en:'Customer'},
+  ad_col_type:{lo:'ປະເພດ', en:'Type'},
+  ad_col_total:{lo:'ຍອດລວມ', en:'Total'},
+  ad_col_status:{lo:'ສະຖານະ', en:'Status'},
+  ad_col_date:{lo:'ວັນທີ', en:'Date'},
+  ad_type_order:{lo:'ອໍເດີ້', en:'Order'},
+  ad_type_quote:{lo:'ໃບສະເໜີລາຄາ', en:'Quotation'},
+  ad_st_new:{lo:'ໃໝ່', en:'New'},
+  ad_st_review:{lo:'ກຳລັງກວດ', en:'In Review'},
+  ad_st_done:{lo:'ຢືນຢັນແລ້ວ', en:'Confirmed'}
+};
+
+function setLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(I18N[key]) el.innerHTML = I18N[key][lang];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(I18N[key]) el.setAttribute('placeholder', I18N[key][lang]);
+  });
+  document.querySelectorAll('.cur-lang').forEach(el=> el.textContent = lang==='lo' ? 'LAO' : 'EN');
+  document.querySelectorAll('.lang-menu div').forEach(d=>d.classList.remove('sel'));
+  document.querySelectorAll('.lang-menu').forEach(m=>{
+    const target = lang==='lo' ? m.children[0] : m.children[1];
+    if(target) target.classList.add('sel');
+  });
+  document.querySelectorAll('.lang-menu').forEach(m=>m.classList.remove('open'));
+  buildAccordion();
+  if(document.getElementById('megaPanel')) buildMega(CATS[0].id);
+}
+
+/* ===================== PROTOTYPE NAV ===================== */
+const buttons = document.querySelectorAll('.proto-nav button');
+buttons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    buttons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(btn.dataset.screen).classList.add('active');
+    window.scrollTo(0,0);
+  });
+});
+
+/* ===================== PRODUCT DETAIL TABS ===================== */
+function setDetailTab(el, panelId){
+  el.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+}
+</script>
+</body>
+</html>
