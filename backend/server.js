@@ -162,7 +162,7 @@ app.get('/admin', (req, res) => res.redirect('/admin.html'));
 app.get('/customer', (req, res) => res.redirect('/customer.html'));
 
 app.use((req, res) => {
-  let filePath = path.join(ROOT, req.url === '/' ? 'nb_lao_wireframes_v2_updated.html' : req.url);
+  let filePath = path.join(ROOT, req.url === '/' ? 'customer.html' : req.url);
   const ext = path.extname(filePath);
   const mime = MIME[ext] || 'application/octet-stream';
 
