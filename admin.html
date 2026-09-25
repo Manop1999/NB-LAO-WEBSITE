@@ -517,7 +517,6 @@
             type="email"
             id="loginEmail"
             placeholder="admin@nblao.la"
-            value="admin@nblao.la"
           />
         </div>
         <div class="field">
@@ -764,7 +763,7 @@
             csvImport: "ນຳເຂົ້າ CSV",
             uploadImage: "ອັບໂຫຼດຮູບ",
             adminDashboard: "ແຜນຄວາມຜູ້ບໍລິຫານ",
-            loginTitle: "ແຜນຄວາມຜູ້ບໍລິຫານ",
+            loginTitle: "ເຂົ້າສູ່ລະບົບຜູ້ບໍລິຫານ",
             loginSubtitle: "ເຂົ້າສູ່ລະບົບຜູ້ບໍລິຫານ",
             email: "ອີເມວ",
             password: "ລະຫັດຜ່ານ",
@@ -1212,7 +1211,7 @@
             csvImport: "Import CSV",
             uploadImage: "Upload Image",
             adminDashboard: "Admin Dashboard",
-            loginTitle: "Admin Dashboard",
+            loginTitle: "Admin Login",
             loginSubtitle: "Admin Login",
             email: "Email",
             password: "Password",
@@ -1730,6 +1729,9 @@
       const API = "/api/admin";
 
       async function api(method, path, body) {
+        // Normalize paths without a leading slash so "coupons?page=1"
+        // becomes "/api/admin/coupons?page=1", not "/api/admincoupons?page=1".
+        if (path[0] !== "/") path = "/" + path;
         const opts = {
           method,
           headers: {

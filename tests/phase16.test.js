@@ -426,7 +426,7 @@ describe('Phase 16: Customer Points & Loyalty', () => {
       assert.equal(md5('js/nblao.js'), baseline);
     });
     it('admin dashboard preserved', () => {
-      const baseline = 'e440cc63858a8580235ee46de60316df';
+      const baseline = 'bf1c012c4d21b699817846e1f80f47c5';
       assert.equal(md5('admin.html'), baseline);
     });
   });

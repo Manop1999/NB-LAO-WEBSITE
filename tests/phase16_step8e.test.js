@@ -63,7 +63,7 @@ describe("Preserve",()=>{
 it("wireframe",()=>{assert.equal(md5(fs2.readFileSync("nb_lao_wireframes_v2_updated.html")),"aebe02f72a5852289b1a7ad27c7dd657");});
 it("CSS",()=>{assert.equal(md5(fs2.readFileSync("styles/nblao.css")),"ad86eea2c740140705b8c06b2419d1a4");});
 it("JS",()=>{assert.equal(md5(fs2.readFileSync("js/nblao.js")),"b53a5966017bdd3fb7794e58822aeb98");});
-it("admin",()=>{assert.equal(md5(fs2.readFileSync("admin.html")),"e440cc63858a8580235ee46de60316df");});
+it("admin",()=>{assert.equal(md5(fs2.readFileSync("admin.html")),"bf1c012c4d21b699817846e1f80f47c5");});
 });
 describe("Routes",()=>{
 it("server",()=>{assert.ok(fs2.readFileSync("backend/server.js","utf8").includes("/api/loyalty"));});
